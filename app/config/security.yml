@@ -12,9 +12,14 @@ security:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
-
         main:
             anonymous: ~
+            pattern: ^/
+        wsse_secured:
+            pattern:   ^/api/
+            stateless: true
+            wsse:      { lifetime: 30 }
+
             # activate different ways to authenticate
 
             # http_basic: ~

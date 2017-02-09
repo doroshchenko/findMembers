@@ -68,3 +68,17 @@ swiftmailer:
     username:  "%mailer_user%"
     password:  "%mailer_password%"
     spool:     { type: memory }
+
+assetic:
+    debug:          '%kernel.debug%'
+    use_controller: '%kernel.debug%'
+    filters:
+        cssrewrite: ~
+        scssphp:
+            formatter: 'Leafo\ScssPhp\Formatter\Compressed'
+        jsqueeze: ~
+    assets:
+        jquery_and_ui:
+            inputs:
+                 - '@AppBundle/Resources/public/js/libs/jquery-3.1.1.js'
+                 - '@AppBundle/Resources/public/js/libs/jquery-ui-1.12.1/jquery-ui.js'

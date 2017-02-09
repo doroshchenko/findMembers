@@ -32,7 +32,10 @@ class DefaultController extends Controller
         echo 'blog_api';
     }
 
-    public function blogAction()
+    /**
+     * @Route ("/v/")
+     */
+    public function vAction()
     {
         echo 'blog';
     }

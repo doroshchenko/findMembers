@@ -1,13 +1,66 @@
-$blue: #3bbfce;
-$margin: 16px;
-
-.content-navigation {
-  border-color: $blue;
-  color: darken($blue, 9%);
+html {
+    font-family: GillSans, Calibri, Trebuchet, sans-serif;
 }
 
-.border {
-  padding: $margin / 2;
-  margin: $margin / 2;
-  border-color: $blue;
+body {
+    background-color: #f0f2f5;
+}
+nav {
+    background: linear-gradient(to top, #b5bdc8 0%, #828c95 36%, #0089ec 100%);
+        .btn-floating {
+            background-color: #79baea !important;
+        }
+}
+
+.search-tags {
+    background: #fff;
+    border-radius: 2px;
+    box-shadow: 0 1px 0 0 #d7d8db, 0 0 0 1px #e3e4e8;
+    margin-top: 15px;
+    font-weight: 300;
+    font-size: 13px;
+    padding: 4px 0 4px 20px !important;
+    a {
+        margin-right: 10px;
+        color: #2a5885;
+    }
+}
+
+.block {
+    background: #fff;
+    min-height: 250px;
+    padding: 10px;
+    border-radius: 3px;
+    box-shadow: 0 1px 0 0 #d7d8db, 0 0 0 1px #e3e4e8;
+    margin: 15px 0;
+    color: #2a5885;
+}
+
+.user-icon {
+    background: url(https://pp.vk.me/c633926/v633926447/32cdc/3nb_p40rELs.jpg);
+}
+.card {
+    .card-head {
+        background: linear-gradient(to top, #b5bdc8 0%, #0089ec 36%, #ddd 100%);
+        padding: 5px 10px;
+        color: white !important;
+        text-align: right;
+    }
+    .user-block {
+      .event-info {
+        float:right;
+      }
+    }
+    .card-content {
+        .event-people {
+            margin: 5px;
+            position: relative;
+            left: 51%;
+            font-size: 11px;
+            color: #29b6f6 !important;
+        }
+        .join-event-button {
+            float: right;
+        }
+  }
 }

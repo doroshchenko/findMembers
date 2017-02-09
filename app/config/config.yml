@@ -82,3 +82,10 @@ assetic:
             inputs:
                  - '@AppBundle/Resources/public/js/libs/jquery-3.1.1.js'
                  - '@AppBundle/Resources/public/js/libs/jquery-ui-1.12.1/jquery-ui.js'
+        materialize:
+            inputs:
+                 - '@AppBundle/Resources/public/styles/materialize/js/materialize.min.js'
+        font-awesome-woff:
+            inputs:
+                - '@AppBundle/Resources/public/styles/materialize/fonts/roboto/Roboto-Regular.woff2'
+            output: 'fonts/roboto/Roboto-Regular.woff2'

@@ -12,6 +12,7 @@
                     {% if app.user %}
                         <li><a href="{{ path('fos_user_security_logout') }}">Выйти</a></li>
                         <li><a class="btn-floating btn user-icon"></a></li>
+                        <li>{{ app.user }}</li>
                     {% else %}
                         <li><a href="{{ url('ajax_login') }}" class="load-login-modal" onclick="return AuthObject.loadModal(this.href)">Войти</a></li>
                     {% endif %}

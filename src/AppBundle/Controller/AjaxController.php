@@ -20,13 +20,13 @@ class AjaxController extends Controller
      */
     public function loginAction(Request $request)
     {
-        $fosLogin = $this->get('fos_security_controller');
-        $fosLogin->setContainer($this->container);
-        $loginForm = $fosLogin->loginAction($request)->getContent();
+        $loginController = $this->get('dimad_security_controller');
+        $loginController->setContainer($this->container);
+        $loginForm = $loginController->loginAction($request)->getContent();
 
-        $fosRegister = $this->get('fos_registration_controller');
-        $fosRegister->setContainer($this->container);
-        $registerForm = $fosRegister->registerAction($request)->getContent();
+        $registerController = $this->get('dimad_registration_controller');
+        $registerController->setContainer($this->container);
+        $registerForm = $registerController->registerAction($request)->getContent();
 
         return $this->render('@App/default/auth-modal.html.twig',
             ['loginForm' => $loginForm, 'registerForm' => $registerForm]);

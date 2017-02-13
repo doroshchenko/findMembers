@@ -8,7 +8,7 @@ services:
 #        class: AppBundle\Directory\ClassName
 #        arguments: ["@another_service_name", "plain_value", "%parameter_name%"]
 
-    fos_security_controller:
-        class: FOS\UserBundle\Controller\SecurityController
-    fos_registration_controller:
-        class: FOS\UserBundle\Controller\RegistrationController
+    dimad_security_controller:
+        class: DimadUserBundle\Controller\SecurityController
+    dimad_registration_controller:
+        class: DimadUserBundle\Controller\RegistrationController

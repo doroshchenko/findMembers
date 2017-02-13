@@ -8,12 +8,24 @@
             appendModalTo : '#wrapper',
             modalWindow   : '.auth-modal-window',
             submitLogin   : '#_submit',
+            submitRegister: '#register-form input[type="submit"]',
 
             fields: {
                 loginUser     : '#username',
                 loginPassword : '#password',
                 loginToken    : 'input[name="_csrf_token"]',
-                loginRemember : '#remember_me'
+                loginRemember : '#remember_me',
+
+                registerEmail          : '#fos_user_registration_form_email',
+                registerUser           : '#fos_user_registration_form_username',
+                registerPassword       : '#fos_user_registration_form_plainPassword_first',
+                registerPasswordRepeat : '#fos_user_registration_form_plainPassword_second',
+                registerToken          : '#fos_user_registration_form__token'
+            },
+            blocks: {
+                loginFormBlock: '#login-form',
+                registerFormBlock: '#register-form',
+
             }
         },
 
@@ -47,6 +59,7 @@
                     $('.tabs').tabs();
                     that.initRemoveModal();
                     that.initSendLoginForm();
+                    that.initSendRegistrationForm();
                 },
                 error: function (response) {
                     console.log(response);
@@ -78,11 +91,55 @@
                     url: "/web/app_dev.php/login_check",
                     data: data,
                     method: 'post',
-                    success: function() {
-                        console.log('ok');
+                    success: function(response) {
+                        var node = document.createElement('div');
+                        node.innerHTML = response;
+                        if ($(node).children().first().text() == 'Invalid credentials.') {
+                            $(that.selectors.blocks.loginFormBlock).html(response);
+                            that.initSendLoginForm();
+                            return;
+                        }
+
                         window.location.reload();
                     },
                     error: function() {
+                        $(that.selectors.blocks.loginFormBlock).html('server error');
+                        console.log('error');
+                    }
+                });
+            });
+        },
+        initSendRegistrationForm: function() {
+            var that = this;
+            $(that.selectors.submitRegister).click(function(e){
+                e.preventDefault();
+                var data = {
+                    fos_user_registration_form: {
+                        email        : $(that.selectors.fields.registerEmail).val(),
+                        username     : $(that.selectors.fields.registerUser).val(),
+                        plainPassword: {
+                            first  : $(that.selectors.fields.registerPassword).val(),
+                            second : $(that.selectors.fields.registerPasswordRepeat).val()
+                        },
+                        _token     : $(that.selectors.fields.registerToken).val(),
+                    }
+                };
+                $.ajax({
+                    url: "/web/app_dev.php/register/",
+                    data: data,
+                    method: 'post',
+                    success: function(response) {
+                        var resp = document.createElement('div');
+                        resp.innerHTML = response;
+                        if ($(resp).children('.register-errors').length) {
+                            $(that.selectors.blocks.registerFormBlock).html(response);
+                            that.initSendRegistrationForm();
+                            return;
+                        }
+                        window.location.reload();
+                    },
+                    error: function() {
+                        $(that.selectors.blocks.registerFormBlock).html('server error');
                         console.log('error');
                     }
                 });

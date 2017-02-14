@@ -23,12 +23,11 @@
                 registerToken          : '#fos_user_registration_form__token'
             },
             blocks: {
-                loginFormBlock: '#login-form',
-                registerFormBlock: '#register-form',
+                loginFormBlock: '#login-form form',
+                registerFormBlock: '#register-form form',
 
             }
         },
-
         init: function() {
 
             /*$('body').on('click', '.load-login-modal', function(e) {
@@ -87,8 +86,10 @@
                     _csrf_token: $(that.selectors.fields.loginToken).val(),
                     _remember_me: $(that.selectors.fields.loginRemember).val(),
                 };
+                var url = $(that.selectors.blocks.loginFormBlock).attr('action');
+
                 $.ajax({
-                    url: "/web/app_dev.php/login_check",
+                    url: url,
                     data: data,
                     method: 'post',
                     success: function(response) {
@@ -124,8 +125,10 @@
                         _token     : $(that.selectors.fields.registerToken).val(),
                     }
                 };
+                var url = $(that.selectors.blocks.registerFormBlock).attr('action');
+
                 $.ajax({
-                    url: "/web/app_dev.php/register/",
+                    url: url,
                     data: data,
                     method: 'post',
                     success: function(response) {

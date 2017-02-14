@@ -1,0 +1,77 @@
+{% extends '@App/default/index.html.twig' %}
+
+{% block content %}
+    <div class="container">
+       <h2>Создайте свое мероприятие</h2>
+        <div class="row">
+            <form class="col s12" action="" method="post">
+                <div class="row">
+                    <div class="input-field col s12">
+                        <input placeholder="Заголовок" id="title" type="text" maxlength="100" class="validate">
+                        <label for="title">Заголовок</label>
+                    </div>
+                    <div class="input-field col s6">
+                        <p><label for="title">Нужно человек</label></p>
+                        <input placeholder="Нужно человек" id="people-need" type="range" min="1" max="20" class="validate">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col s4">
+                        <label>Browser Select</label>
+                        <select class="browser-default">
+                            <option value="" disabled selected>Страна</option>
+                            <option value="1">Option 1</option>
+                            <option value="2">Option 2</option>
+                            <option value="3">Option 3</option>
+                        </select>
+                    </div>
+                    <div class="col s4">
+                        <label>Browser Select</label>
+                        <select class="browser-default">
+                            <option value="" disabled selected>Область</option>
+                            <option value="1">Option 1</option>
+                            <option value="2">Option 2</option>
+                            <option value="3">Option 3</option>
+                        </select>
+                    </div>
+                    <div class="col s4">
+                        <label>Browser Select</label>
+                        <select class="browser-default">
+                            <option value="" disabled selected>Город</option>
+                            <option value="1">Option 1</option>
+                            <option value="2">Option 2</option>
+                            <option value="3">Option 3</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s12">
+                        <textarea id="event-text" class="materialize-textarea"></textarea>
+                        <label for="textarea1">Опишите ваше событие</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s12">
+                        <p> Дата проведения</p>
+                        <input type="text" class="datepicker" onclick="$('.datepicker').datetimepicker();">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col s12">
+                        <label for="textarea1">Добавте теги</label>
+                        <div class="chips chips-placeholder" onclick="$('.chips-placeholder').material_chip({
+                            placeholder: 'Enter a tag',
+                            secondaryPlaceholder: '+Tag'});">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col s12">
+                        <input type="submit" value="Создать">
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}
+

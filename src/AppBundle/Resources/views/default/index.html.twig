@@ -8,7 +8,7 @@
                 <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
                 <ul class="right hide-on-med-and-down">
                     <li><a href="badges.html">Найти события</a></li>
-                    <li><a href="collapsible.html">Создать событие</a></li>
+                    <li><a href={{ path("create-event") }}>Создать событие</a></li>
                     {% if app.user %}
                         <li><a href="{{ path('fos_user_security_logout') }}">Выйти</a></li>
                         <li><a class="btn-floating btn user-icon"></a></li>
@@ -26,6 +26,7 @@
                 </ul>
             </div>
         </nav>
+        {% block content %}
         <div class="container">
             <div class="row">
                 <div class="col s8">
@@ -122,9 +123,8 @@
 
             <div>
         </div>
-
-
     </div>
+    {% endblock %}
 
 {% endblock %}
 
@@ -133,6 +133,8 @@
         '@jquery_and_ui'
         '@materialize'
         '@AppBundle/Resources/public/js/*'
+        '@AppBundle/Resources/public/datetimepicker-master/jquery.datetimepicker.min.js'
+        '@AppBundle/Resources/public/datetimepicker-master/build/jquery.datetimepicker.full.min.js'
         output='js/compiled/main.js' %}
     <script src="{{ asset_url }}"></script>
     {% endjavascripts %}
@@ -150,6 +152,7 @@
     <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     {% stylesheets
     '@AppBundle/Resources/public/styles/materialize/css/materialize.min.css'
+    '@AppBundle/Resources/public/datetimepicker-master/jquery.datetimepicker.css'
     '@AppBundle/Resources/public/styles/scss/*' filter="scssphp" %}
     <link href="{{ asset_url }}" type="text/css" rel="stylesheet" />
     {% endstylesheets %}

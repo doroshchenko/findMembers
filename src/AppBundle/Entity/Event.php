@@ -8,6 +8,7 @@
 
 namespace AppBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -24,11 +25,12 @@ class Event
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
+
     /**
-     * @ORM\Column(type="integer")
-     * @ManyToOne(targetEntity="User")
+     *
+     * @ORM\ManyToOne(targetEntity="User", inversedBy="events")
      */
-    private $id_author;
+    private $author;
 
     /**
      * @ORM\Column(type="string", length=100)
@@ -46,26 +48,275 @@ class Event
     private $event_date_time;
 
     /**
-     * @ORM\Column(type="integer" length="3")
+     * @ORM\Column(type="integer", length=3)
      */
     private $people_needed;
 
     /**
      * @ORM\Column(type="integer")
-     * @Id @ManyToOne(targetEntity="Country")
+     * @ORM\ManyToOne(targetEntity="Country")
      */
-    private $id_country;
+    private $country;
 
     /**
      * @ORM\Column(type="integer")
-     * @Id @ManyToOne(targetEntity="Region")
+     * @ORM\ManyToOne(targetEntity="Region")
      */
-    private $id_region;
+    private $region;
 
     /**
      * @ORM\Column(type="integer")
-     * @Id @ManyToOne(targetEntity="City")
+     * @ORM\ManyToOne(targetEntity="City")
      */
-    private $id_city;
+    private $city;
 
+
+    /**
+     * @var string
+     * @ORM\ManyToMany(targetEntity="EventTag", inversedBy="events")
+     * @ORM\JoinTable(name="event_tag")
+     */
+    private $event_tags;
+
+    public function __construct()
+    {
+        $this->event_tags = new ArrayCollection();
+    }
+
+
+    /**
+     * Get id
+     *
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set title
+     *
+     * @param string $title
+     *
+     * @return Event
+     */
+    public function setTitle($title)
+    {
+        $this->title = $title;
+
+        return $this;
+    }
+
+    /**
+     * Get title
+     *
+     * @return string
+     */
+    public function getTitle()
+    {
+        return $this->title;
+    }
+
+    /**
+     * Set text
+     *
+     * @param string $text
+     *
+     * @return Event
+     */
+    public function setText($text)
+    {
+        $this->text = $text;
+
+        return $this;
+    }
+
+    /**
+     * Get text
+     *
+     * @return string
+     */
+    public function getText()
+    {
+        return $this->text;
+    }
+
+    /**
+     * Set eventDateTime
+     *
+     * @param \DateTime $eventDateTime
+     *
+     * @return Event
+     */
+    public function setEventDateTime($eventDateTime)
+    {
+        $this->event_date_time = $eventDateTime;
+
+        return $this;
+    }
+
+    /**
+     * Get eventDateTime
+     *
+     * @return \DateTime
+     */
+    public function getEventDateTime()
+    {
+        return $this->event_date_time;
+    }
+
+    /**
+     * Set peopleNeeded
+     *
+     * @param integer $peopleNeeded
+     *
+     * @return Event
+     */
+    public function setPeopleNeeded($peopleNeeded)
+    {
+        $this->people_needed = $peopleNeeded;
+
+        return $this;
+    }
+
+    /**
+     * Get peopleNeeded
+     *
+     * @return integer
+     */
+    public function getPeopleNeeded()
+    {
+        return $this->people_needed;
+    }
+
+    /**
+     * Set country
+     *
+     * @param integer $country
+     *
+     * @return Event
+     */
+    public function setCountry($country)
+    {
+        $this->country = $country;
+
+        return $this;
+    }
+
+    /**
+     * Get country
+     *
+     * @return integer
+     */
+    public function getCountry()
+    {
+        return $this->country;
+    }
+
+    /**
+     * Set region
+     *
+     * @param integer $region
+     *
+     * @return Event
+     */
+    public function setRegion($region)
+    {
+        $this->region = $region;
+
+        return $this;
+    }
+
+    /**
+     * Get region
+     *
+     * @return integer
+     */
+    public function getRegion()
+    {
+        return $this->region;
+    }
+
+    /**
+     * Set city
+     *
+     * @param integer $city
+     *
+     * @return Event
+     */
+    public function setCity($city)
+    {
+        $this->city = $city;
+
+        return $this;
+    }
+
+    /**
+     * Get city
+     *
+     * @return integer
+     */
+    public function getCity()
+    {
+        return $this->city;
+    }
+
+    /**
+     * Set author
+     *
+     * @param \AppBundle\Entity\User $author
+     *
+     * @return Event
+     */
+    public function setAuthor(\AppBundle\Entity\User $author = null)
+    {
+        $this->author = $author;
+
+        return $this;
+    }
+
+    /**
+     * Get author
+     *
+     * @return \AppBundle\Entity\User
+     */
+    public function getAuthor()
+    {
+        return $this->author;
+    }
+
+    /**
+     * Add eventTag
+     *
+     * @param \AppBundle\Entity\EventTag $eventTag
+     *
+     * @return Event
+     */
+    public function addEventTag(\AppBundle\Entity\EventTag $eventTag)
+    {
+        $this->event_tags[] = $eventTag;
+
+        return $this;
+    }
+
+    /**
+     * Remove eventTag
+     *
+     * @param \AppBundle\Entity\EventTag $eventTag
+     */
+    public function removeEventTag(\AppBundle\Entity\EventTag $eventTag)
+    {
+        $this->event_tags->removeElement($eventTag);
+    }
+
+    /**
+     * Get eventTags
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getEventTags()
+    {
+        return $this->event_tags;
+    }
 }

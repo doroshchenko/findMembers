@@ -4,34 +4,34 @@
     <div class="container">
        <h2>Создайте свое мероприятие</h2>
         <div class="row">
-            <form class="col s12" action="" method="post">
+                {{ form_start(form, {'attr': {'class': 'col s12'}}) }}
+            {{ form_errors(form) }}
                 <div class="row">
                     <div class="input-field col s12">
-                        <input placeholder="Заголовок" id="title" type="text" maxlength="100" class="validate">
-                        <label for="title">Заголовок</label>
+                        {{ form_label(form.title, 'Заголовок') }}
+                        {{ form_widget(form.title, {
+                            'attr': { 'class': 'validate', 'id': 'title' }})
+                        }}
                     </div>
                     <div class="input-field col s6">
-                        <p><label for="title">Нужно человек</label></p>
-                        <input placeholder="Нужно человек" id="people-need" type="range" min="1" max="20" class="validate">
+                        {{ form_label(form.people_needed) }}
+                        {{ form_widget(form.people_needed, {
+                            'attr': { 'class': 'validate', 'min': '3', 'max': '20' }})
+                        }}
                     </div>
                 </div>
                 <div class="row">
                     <div class="col s4">
-                        <label>Browser Select</label>
-                        <select class="browser-default">
-                            <option value="" disabled selected>Страна</option>
-                            <option value="1">Option 1</option>
-                            <option value="2">Option 2</option>
-                            <option value="3">Option 3</option>
-                        </select>
+                        {{ form_label(form.country, 'Место проведения') }}
+                        {{  form_errors(form.country) }}
+                        {{ form_widget(form.country, {'attr': {'class': 'browser-default'}}) }}
                     </div>
                     <div class="col s4">
                         <label>Browser Select</label>
                         <select class="browser-default">
-                            <option value="" disabled selected>Область</option>
+                            <option value="" disabled selected>Город</option>
                             <option value="1">Option 1</option>
                             <option value="2">Option 2</option>
-                            <option value="3">Option 3</option>
                         </select>
                     </div>
                     <div class="col s4">
@@ -46,31 +46,38 @@
                 </div>
                 <div class="row">
                     <div class="input-field col s12">
-                        <textarea id="event-text" class="materialize-textarea"></textarea>
-                        <label for="textarea1">Опишите ваше событие</label>
+                        {{ form_label(form.text, 'Опишите ваше событие') }}
+                        {{ form_errors(form.text) }}
+                        {{ form_widget(form.text, {'attr': {'class': 'materialize-textarea'}})}}
                     </div>
                 </div>
                 <div class="row">
                     <div class="input-field col s12">
-                        <p> Дата проведения</p>
-                        <input type="text" class="datepicker" onclick="$('.datepicker').datetimepicker();">
+                        {{ form_label(form.event_date_time, 'Дата проведения') }}
+                        {{ form_errors(form.event_date_time) }}
+                        {{ form_widget(form.event_date_time, {'attr': {
+                            'class': 'datepicker',
+                            'onclick': "$('.datepicker').datetimepicker();"
+                            }})
+                        }}
                     </div>
                 </div>
                 <div class="row">
                     <div class="col s12">
-                        <label for="textarea1">Добавте теги</label>
+                       {{ form_label(form.event_tags, 'Добавте теги') }}
+                        {{ form_errors(form.event_tags) }}
+                        {{ form_widget(form.event_tags, {'attr': {'multiple': 'multiple', 'class': 'browser-default'}}) }}
+                        {# <input type="hidden" id="form_event_tags" name="form[event_tags][0][6]" value="tag1" required="required">
+                        <input type="hidden" id="form_event_tags" name="form[event_tags][1][5]" value="tag2" required="required">
+ #}
                         <div class="chips chips-placeholder" onclick="$('.chips-placeholder').material_chip({
                             placeholder: 'Enter a tag',
                             secondaryPlaceholder: '+Tag'});">
                         </div>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col s12">
-                        <input type="submit" value="Создать">
-                    </div>
-                </div>
-            </form>
+            {{ form_widget(form.save) }}
+            {{ form_end(form) }}
         </div>
     </div>
 {% endblock %}

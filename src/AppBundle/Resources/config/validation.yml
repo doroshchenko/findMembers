@@ -1,0 +1,8 @@
+
+AppBundle\Entity\Event:
+    properties:
+        title:
+            - NotBlank: ~
+        people_needed:
+            - NotBlank: ~
+

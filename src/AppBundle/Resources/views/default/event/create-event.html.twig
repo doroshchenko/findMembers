@@ -27,21 +27,12 @@
                         {{ form_widget(form.country, {'attr': {'class': 'browser-default'}}) }}
                     </div>
                     <div class="col s4">
-                        <label>Browser Select</label>
-                        <select class="browser-default">
-                            <option value="" disabled selected>Город</option>
-                            <option value="1">Option 1</option>
-                            <option value="2">Option 2</option>
-                        </select>
+                        {{  form_errors(form.region) }}
+                        {{ form_widget(form.region, {'attr': {'class': 'browser-default'}}) }}
                     </div>
                     <div class="col s4">
-                        <label>Browser Select</label>
-                        <select class="browser-default">
-                            <option value="" disabled selected>Город</option>
-                            <option value="1">Option 1</option>
-                            <option value="2">Option 2</option>
-                            <option value="3">Option 3</option>
-                        </select>
+                        {{  form_errors(form.city) }}
+                        {{ form_widget(form.city, {'attr': {'class': 'browser-default'}}) }}
                     </div>
                 </div>
                 <div class="row">
@@ -55,10 +46,7 @@
                     <div class="input-field col s12">
                         {{ form_label(form.event_date_time, 'Дата проведения') }}
                         {{ form_errors(form.event_date_time) }}
-                        {{ form_widget(form.event_date_time, {'attr': {
-                            'class': 'datepicker',
-                            'onclick': "$('.datepicker').datetimepicker();"
-                            }})
+                        {{ form_widget(form.event_date_time)
                         }}
                     </div>
                 </div>

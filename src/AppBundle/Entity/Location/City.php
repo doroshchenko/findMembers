@@ -7,6 +7,7 @@
  */
 
 namespace AppBundle\Entity\Location;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -28,13 +29,24 @@ class City
      * @var
      * @ORM\ManyToOne(targetEntity="Region", inversedBy="cities")
      */
-    protected $id_region;
+    protected $region;
 
     /**
      * @var string
      * @ORM\Column(type="string", length=200)
      */
     protected $name;
+
+    /**
+     * @var null
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Event", mappedBy="city")
+     */
+    protected $events = null;
+
+    public function __construct()
+    {
+        $this->events = new ArrayCollection();
+    }
 
 
     /**
@@ -72,26 +84,60 @@ class City
     }
 
     /**
-     * Set idRegion
+     * Set region
      *
-     * @param \AppBundle\Entity\Location\Region $idRegion
+     * @param \AppBundle\Entity\Location\Region $region
      *
      * @return City
      */
-    public function setIdRegion(\AppBundle\Entity\Location\Region $idRegion = null)
+    public function setRegion(\AppBundle\Entity\Location\Region $region = null)
     {
-        $this->id_region = $idRegion;
+        $this->region = $region;
 
         return $this;
     }
 
     /**
-     * Get idRegion
+     * Get region
      *
      * @return \AppBundle\Entity\Location\Region
      */
-    public function getIdRegion()
+    public function getRegion()
     {
-        return $this->id_region;
+        return $this->region;
+    }
+
+    /**
+     * Add event
+     *
+     * @param \AppBundle\Entity\Event $event
+     *
+     * @return City
+     */
+    public function addEvent(\AppBundle\Entity\Event $event)
+    {
+        $this->events[] = $event;
+
+        return $this;
+    }
+
+    /**
+     * Remove event
+     *
+     * @param \AppBundle\Entity\Event $event
+     */
+    public function removeEvent(\AppBundle\Entity\Event $event)
+    {
+        $this->events->removeElement($event);
+    }
+
+    /**
+     * Get events
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getEvents()
+    {
+        return $this->events;
     }
 }

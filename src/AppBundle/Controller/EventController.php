@@ -8,16 +8,21 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Entity\User;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\Form\Extension\Core\Type\RangeType;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Entity\Event;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 
 class EventController extends Controller
 {
@@ -36,8 +41,12 @@ class EventController extends Controller
             ->add('people_needed', RangeType::class, ['label' => 'Нужно человек'])
             ->add('country', EntityType::class, [
                 'class' => 'AppBundle:Location\Country', 'choice_label' => 'name'])
+            ->add('region', EntityType::class, [
+                'class' => 'AppBundle:Location\Region', 'choice_label' => 'name'])
+            ->add('city', EntityType::class, [
+                'class' => 'AppBundle:Location\City', 'choice_label' => 'name'])
             ->add('text', TextType::class)
-            ->add('event_date_time', TextType::class)
+            ->add('event_date_time', DateTimeType::class, ['date_widget' => 'single_text', 'time_widget' => 'single_text'])
             ->add('event_tags', null,
                 ['expanded' => 'true', 'multiple' => 'true', 'choice_label' => 'name'])
             ->add('save', SubmitType::class, array('label' => 'create event'))
@@ -52,7 +61,9 @@ class EventController extends Controller
             $em->persist($event);
             $em->flush();
 
-            return $this->redirectToRoute('user_events');
+            return $this->redirectToRoute('user_events',[
+                'id' => $event->getAuthor()->getId()
+            ]);
         }
 
         return $this->render(
@@ -61,10 +72,48 @@ class EventController extends Controller
         ]);
     }
 
-    public function saveAction()
+    /**
+     * @Route("/events/user/{id}", requirements={"id": "\d+"}, name="user_events")
+     */
+    public function userEventsListAction(Request $request)
     {
+        $userId = $request->get('id');
+        $repository = $this->getDoctrine()->getRepository('AppBundle:Event');
+        $events = $repository->findBy(['author' => $userId], ['id' => 'DESC']);
+        return $this->render('@App/default/event/user-events.html.twig', [
+            'events' => $events
+        ]);
 
     }
 
+    /**
+     * @Route("/event/join", name="join_event")
+     * @Method({"POST"})
+     */
+    public function joinEventAction(Request $request)
+    {
+        $member = $this->getDoctrine()
+            ->getRepository('AppBundle:User')
+            ->find((int)($request->get('user')));
+        $event = $this->getDoctrine()
+            ->getRepository('AppBundle:Event')
+            ->find((int)$request->get('event'));
+
+        if ($event->isMember($member)) {
+            $event->removeMember($member);
+        } else {
+            $event->addMember($member);
+        }
+
+        try {
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($event);
+            $em->flush();
+        } catch(Exception $e) {
+            return new JsonResponse(['server_error' => $e->getMessage()]);
+        }
+
+        return new JsonResponse(['ok' => true]);
+    }
 
 }

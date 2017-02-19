@@ -1,0 +1,49 @@
+{% extends '@App/default/index.html.twig' %}
+
+    {% block content %}
+    <div class="container">
+        <div class="row">
+            <div class=" offset-l1 col s10">
+                <h5>События пользователя {{ events[0].author.userName }}</h5>
+                {% for event in events %}
+                <div class="card ">
+                    <div class="card-head">
+                        <span>
+                            {% for tag in event.getEventTags() %}
+                              #{{ tag.name }}
+                            {% endfor %}
+                        </span>
+                    </div>
+                    <div class="card-content">
+                        <span class="card-title"><a href="#">{{ event.title }}</a></span>
+
+                        <p>{{ event.text }}
+                        </p>
+                        <p class="event-people">
+                            колво людей всего: {{ event.peopleNeeded }} <span> требуется еще: 3 чел</span>
+                        </p>
+                        <a class="btn-floating  waves-effect waves-light join-event-button"><i class="material-icons">add</i></a>
+                    </div>
+                    <div class="card-action">
+                        <div class="user-block">
+                            <a class="btn-floating btn user-icon">
+                            </a>
+                            <a href="#" style="margin-left: 5px;">{{ event.getAuthor.getUsername }}</a>
+                            <p class="event-info"> <span class="chip" >{{ event.city.name }}</span>
+                                {% if date(event.eventDateTime) > date() %}
+                                    {% set difference = date(event.eventDateTime).diff(date()) %}
+                                    {% set leftDays = difference.days %}
+                                <span class="chip"> начало через:
+                                     {{ difference.d }} дней {{ difference.h }} ч</span>
+                                {% endif %}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+
+            </div>
+        </div>
+    </div>
+    {% endblock %}
+

@@ -1,4 +1,28 @@
 /**
  * Created by dima on 2/9/17.
  */
-console.log('script');
+
+var Event = {
+    join: function(url, event, user) {
+        var data = {
+            event: event,
+            user: user
+        };
+
+        $.ajax({
+            method: 'post',
+            url: url,
+            data: data,
+            success: function(res) {
+                if (res.ok) {
+                    window.location.reload();
+                }
+            },
+            error: function(res) {
+                console.log(res);
+            }
+        });
+
+
+    }
+};

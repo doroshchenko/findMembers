@@ -8,6 +8,7 @@
 
 namespace AppBundle\Entity;
 
+use AppBundle\AppBundle;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -53,23 +54,22 @@ class Event
     private $people_needed;
 
     /**
-     * @ORM\Column(type="integer")
-     * @ORM\ManyToOne(targetEntity="Country")
+     *
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Location\Country", inversedBy="events")
      */
     private $country;
 
     /**
-     * @ORM\Column(type="integer")
-     * @ORM\ManyToOne(targetEntity="Region")
+     *
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Location\Region", inversedBy="events")
      */
     private $region;
 
     /**
-     * @ORM\Column(type="integer")
-     * @ORM\ManyToOne(targetEntity="City")
+     *
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Location\City", inversedBy="events")
      */
     private $city;
-
 
     /**
      * @var string
@@ -78,11 +78,29 @@ class Event
      */
     private $event_tags;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="User", inversedBy="joined_events")
+     * @ORM\JoinTable(name="event_member")
+     */
+    private $members = null;
+
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    protected $createdAt;
+
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    protected $updatedAt;
+
     public function __construct()
     {
         $this->event_tags = new ArrayCollection();
+        $this->members = new ArrayCollection();
+        $this->createdAt= new \DateTime();
+        $this->updatedAt= new \DateTime();
     }
-
 
     /**
      * Get id
@@ -214,53 +232,6 @@ class Event
         return $this->country;
     }
 
-    /**
-     * Set region
-     *
-     * @param integer $region
-     *
-     * @return Event
-     */
-    public function setRegion($region)
-    {
-        $this->region = $region;
-
-        return $this;
-    }
-
-    /**
-     * Get region
-     *
-     * @return integer
-     */
-    public function getRegion()
-    {
-        return $this->region;
-    }
-
-    /**
-     * Set city
-     *
-     * @param integer $city
-     *
-     * @return Event
-     */
-    public function setCity($city)
-    {
-        $this->city = $city;
-
-        return $this;
-    }
-
-    /**
-     * Get city
-     *
-     * @return integer
-     */
-    public function getCity()
-    {
-        return $this->city;
-    }
 
     /**
      * Set author
@@ -318,5 +289,149 @@ class Event
     public function getEventTags()
     {
         return $this->event_tags;
+    }
+
+    /**
+     * Set region
+     *
+     * @param \AppBundle\Entity\Location\Region $region
+     *
+     * @return Event
+     */
+    public function setRegion(\AppBundle\Entity\Location\Region $region = null)
+    {
+        $this->region = $region;
+
+        return $this;
+    }
+
+    /**
+     * Get region
+     *
+     * @return \AppBundle\Entity\Location\Region
+     */
+    public function getRegion()
+    {
+        return $this->region;
+    }
+
+    /**
+     * Set city
+     *
+     * @param \AppBundle\Entity\Location\City $city
+     *
+     * @return Event
+     */
+    public function setCity(\AppBundle\Entity\Location\City $city = null)
+    {
+        $this->city = $city;
+
+        return $this;
+    }
+
+    /**
+     * Get city
+     *
+     * @return \AppBundle\Entity\Location\City
+     */
+    public function getCity()
+    {
+        return $this->city;
+    }
+
+    /**
+     * Add member
+     *
+     * @param \AppBundle\Entity\User $member
+     *
+     * @return Event
+     */
+    public function addMember(\AppBundle\Entity\User $member)
+    {
+        $this->members[] = $member;
+
+        return $this;
+    }
+
+    /**
+     * Remove member
+     *
+     * @param \AppBundle\Entity\User $member
+     */
+    public function removeMember(\AppBundle\Entity\User $member)
+    {
+        $this->members->removeElement($member);
+    }
+
+    /**
+     * Get members
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getMembers()
+    {
+        return $this->members;
+    }
+
+    /**
+     * Check if user is a member
+     * @param User $user
+     * @return bool
+     */
+    public function isMember(\AppBundle\Entity\User $user)
+    {
+        foreach ($this->members as $member) {
+            if( $member == $user) {
+                return true;
+            }
+        }
+    }
+
+    /**
+     * Set createdAt
+     *
+     * @param \DateTime $createdAt
+     *
+     * @return Event
+     */
+    public function setCreatedAt($createdAt)
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    /**
+     * Get createdAt
+     *
+     * @return \DateTime
+     */
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
+    }
+
+    /**
+     * Set updatedAt
+     *
+     * @param \DateTime $updatedAt
+     *
+     * @return Event
+     */
+    public function setUpdatedAt($updatedAt)
+    {
+        $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    /**
+     * Get updatedAt
+     *
+     * @return \DateTime
+     */
+    public function getUpdatedAt()
+    {
+        return $this->updatedAt;
     }
 }

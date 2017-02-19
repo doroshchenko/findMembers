@@ -20,6 +20,12 @@ class HomeController extends Controller
      */
     public function indexAction()
     {
-        return $this->render('@App/default/index.html.twig');
+        $allEvents = $this->getDoctrine()
+            ->getRepository('AppBundle:Event')
+            ->findBy([], ['id' => 'DESC']);
+
+        return $this->render('@App/default/index.html.twig', [
+            'events' => $allEvents
+        ]);
     }
 }

@@ -11,6 +11,7 @@ namespace AppBundle\Entity\Location;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
+
 /**
  * Class Country
  * @package AppBundle\Entity
@@ -33,13 +34,19 @@ class Country
     protected $name;
 
     /**
-     * @var null
-     * @ORM\OneToMany(targetEntity="Region", mappedBy="id_country")
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Event", mappedBy="country")
+     */
+    protected $events = null;
+
+    /**
+     *
+     * @ORM\OneToMany(targetEntity="Region", mappedBy="country")
      */
     protected $regions = null;
 
     public function __construct()
     {
+        $this->events = new ArrayCollection();
         $this->regions = new ArrayCollection();
     }
 
@@ -52,6 +59,7 @@ class Country
     {
         return $this->id;
     }
+
 
     /**
      * Set name
@@ -75,6 +83,51 @@ class Country
     public function getName()
     {
         return $this->name;
+    }
+
+
+    public function __toString()
+    {
+        // TODO: Implement __toString() method.
+        return $this->name;
+    }
+
+
+
+   
+
+    /**
+     * Add event
+     *
+     * @param \AppBundle\Entity\Event $event
+     *
+     * @return Country
+     */
+    public function addEvent(\AppBundle\Entity\Event $event)
+    {
+        $this->events[] = $event;
+
+        return $this;
+    }
+
+    /**
+     * Remove event
+     *
+     * @param \AppBundle\Entity\Event $event
+     */
+    public function removeEvent(\AppBundle\Entity\Event $event)
+    {
+        $this->events->removeElement($event);
+    }
+
+    /**
+     * Get events
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getEvents()
+    {
+        return $this->events;
     }
 
     /**

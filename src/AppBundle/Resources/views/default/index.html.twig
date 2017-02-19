@@ -4,14 +4,14 @@
     <div id="wrapper">
         <nav>
             <div class="nav-wrapper container">
-                <a href="#!" class="brand-logo">Найди участников</a>
+                <a href="{{ path("homepage") }}" class="brand-logo">Найди участников</a>
                 <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
                 <ul class="right hide-on-med-and-down">
                     <li><a href="badges.html">Найти события</a></li>
                     <li><a href={{ path("create-event") }}>Создать событие</a></li>
                     {% if app.user %}
                         <li><a href="{{ path('fos_user_security_logout') }}">Выйти</a></li>
-                        <li><a class="btn-floating btn user-icon"></a></li>
+                        <li><a href="{{ path('user_events', {'id': app.user.id}) }}" class="btn-floating btn user-icon"></a></li>
                         <li>{{ app.user }}</li>
                     {% else %}
                         <li><a href="{{ url('ajax_login') }}" class="load-login-modal" onclick="return AuthObject.loadModal(this.href)">Войти</a></li>
@@ -39,78 +39,55 @@
                         <a href="#!" >#нужна помощь</a>
                     </div>
                     <h5>Лента событий</h5>
-                    <div class="card ">
-                        <div class="card-head">
-                            <span> #спорт #минифутбол</span>
-                        </div>
-                        <div class="card-content">
-                            <span class="card-title"><a href="#">Минифутбол на шаранговича. Пятница 20.00</a></span>
-
-                            <p>Играем в футбол по пятницам, постоянно недобор людей.
-                                Бесплатно доберем в команду всех желающих
-                            </p>
-                            <p class="event-people">
-                                колво людей всего: 11 <span> требуется еще: 3 чел</span>
-                            </p>
-                            <a class="btn-floating  waves-effect waves-light join-event-button"><i class="material-icons">add</i></a>
-                        </div>
-                        <div class="card-action">
-                            <div class="user-block">
-                                <a class="btn-floating btn user-icon">
+                    {% for event in events %}
+                        <div class="card ">
+                            <div class="card-head">
+                        <span>
+                            {% for tag in event.getEventTags() %}
+                                #{{ tag.name }}
+                            {% endfor %}
+                        </span>
+                            </div>
+                            <div class="card-content">
+                                <span class="card-title"><a href="#">{{ event.title }}</a></span>
+                                <div class="post_created">{{ event.createdAt|date('Y-m-d') }}</div>
+                                <p>{{ event.text }}
+                                </p>
+                                <p class="event-people">
+                                    колво людей всего: {{ event.peopleNeeded }} <span> требуется еще: {{ event.peopleNeeded - event.getMembers()|length }} чел</span>
+                                </p>
+                                {% if date(event.eventDateTime) > date()  and app.user%}
+                                {# join or leave event on click #}
+                                <a class="btn-floating  waves-effect waves-light join-event-button"
+                                   onclick="Event.join('{{ path('join_event')}}', '{{ event.id }}', '{{ app.user.id }}')">
+                                    <i class="material-icons">
+                                        {% if event.isMember(app.user) %} remove
+                                        {% else %} add
+                                        {% endif %}
+                                    </i>
                                 </a>
-                                <a href="#" style="margin-left: 5px;">Максим Дорощенко</a>
-                                <p class="event-info"> <span class="chip" >Минск</span> <span class="chip"> начало через: 2 дня</span></p>
+                                {% endif %}
+                            </div>
+                            <div class="card-action">
+                                <div class="user-block">
+                                    <a class="btn-floating btn user-icon">
+                                    </a>
+                                    <a href="#" style="margin-left: 5px;">{{ event.getAuthor.getUsername }}</a>
+                                    <p class="event-info"> <span class="chip" >{{ event.city.name }}</span>
+                                        {% if date(event.eventDateTime) > date() %}
+                                            {% set difference = date(event.eventDateTime).diff(date()) %}
+                                            {% set leftDays = difference.days %}
+                                            <span class="chip"> начало через:
+                                                {{ difference.d }} дней {{ difference.h }} ч</span>
+                                        {% else %}
+                                            <span class="chip">завершено</span>
+                                        {% endif %}
+
+                                    </p>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="card ">
-                        <div class="card-head">
-                            <span> #спорт #минифутбол</span>
-                        </div>
-                        <div class="card-content">
-                            <span class="card-title"><a href="#">Минифутбол на шаранговича. Пятница 20.00</a></span>
-
-                            <p>Играем в футбол по пятницам, постоянно недобор людей.
-                                Бесплатно доберем в команду всех желающих
-                            </p>
-                            <p class="event-people">
-                                колво людей всего: 11 <span> требуется еще: 3 чел</span>
-                            </p>
-                            <a class="btn-floating  waves-effect waves-light join-event-button"><i class="material-icons">add</i></a>
-                        </div>
-                        <div class="card-action">
-                            <div class="user-block">
-                                <a class="btn-floating btn user-icon">
-                                </a>
-                                <a href="#" style="margin-left: 5px;">Максим Дорощенко</a>
-                                <p class="event-info"> <span class="chip" >Минск</span> <span class="chip"> начало через: 2 дня</span></p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card ">
-                        <div class="card-head">
-                            <span> #спорт #минифутбол</span>
-                        </div>
-                        <div class="card-content">
-                            <span class="card-title"><a href="#">Минифутбол на шаранговича. Пятница 20.00</a></span>
-
-                            <p>Играем в футбол по пятницам, постоянно недобор людей.
-                                Бесплатно доберем в команду всех желающих
-                            </p>
-                            <p class="event-people">
-                                колво людей всего: 11 <span> требуется еще: 3 чел</span>
-                            </p>
-                            <a class="btn-floating  waves-effect waves-light join-event-button"><i class="material-icons">add</i></a>
-                        </div>
-                        <div class="card-action">
-                            <div class="user-block">
-                                <a class="btn-floating btn user-icon">
-                                </a>
-                                <a href="#" style="margin-left: 5px;">Максим Дорощенко</a>
-                                <p class="event-info"> <span class="chip" >Минск</span> <span class="chip"> начало через: 2 дня</span></p>
-                            </div>
-                        </div>
-                    </div>
+                    {% endfor %}
                 </div>
                 <div class="col s4 ">
                     <div class="block">

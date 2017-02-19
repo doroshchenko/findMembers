@@ -31,7 +31,7 @@ class Region
      * @var int
      * @ORM\ManyToOne(targetEntity="Country", inversedBy="regions")
      */
-    protected $id_country;
+    protected $country;
     /**
      * @var string
      * @ORM\Column(type="string", length=155)
@@ -40,14 +40,23 @@ class Region
 
     /**
      * @var null
-     * @ORM\OneToMany(targetEntity="City", mappedBy="id_region")
+     * @ORM\OneToMany(targetEntity="City", mappedBy="region")
      */
     protected $cities = null;
+
+    /**
+     * @var null
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Event", mappedBy="region")
+     */
+    protected $events = null;
 
     public function __construct()
     {
         $this->cities = new ArrayCollection();
+        $this->events = new ArrayCollection();
     }
+
+
 
     /**
      * Get id
@@ -84,27 +93,27 @@ class Region
     }
 
     /**
-     * Set idCountry
+     * Set country
      *
-     * @param \AppBundle\Entity\Location\Country $idCountry
+     * @param \AppBundle\Entity\Location\Country $country
      *
      * @return Region
      */
-    public function setIdCountry(\AppBundle\Entity\Location\Country $idCountry = null)
+    public function setCountry(\AppBundle\Entity\Location\Country $country = null)
     {
-        $this->id_country = $idCountry;
+        $this->country = $country;
 
         return $this;
     }
 
     /**
-     * Get idCountry
+     * Get country
      *
      * @return \AppBundle\Entity\Location\Country
      */
-    public function getIdCountry()
+    public function getCountry()
     {
-        return $this->id_country;
+        return $this->country;
     }
 
     /**
@@ -139,5 +148,39 @@ class Region
     public function getCities()
     {
         return $this->cities;
+    }
+
+    /**
+     * Add event
+     *
+     * @param \AppBundle\Entity\Event $event
+     *
+     * @return Region
+     */
+    public function addEvent(\AppBundle\Entity\Event $event)
+    {
+        $this->events[] = $event;
+
+        return $this;
+    }
+
+    /**
+     * Remove event
+     *
+     * @param \AppBundle\Entity\Event $event
+     */
+    public function removeEvent(\AppBundle\Entity\Event $event)
+    {
+        $this->events->removeElement($event);
+    }
+
+    /**
+     * Get events
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getEvents()
+    {
+        return $this->events;
     }
 }

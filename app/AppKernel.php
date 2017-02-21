@@ -18,7 +18,8 @@ class AppKernel extends Kernel
             new AppBundle\AppBundle(),
             new Symfony\Bundle\AsseticBundle\AsseticBundle(),
             new FOS\UserBundle\FOSUserBundle(),
-            new \DimadUserBundle\DimadUserBundle()
+            new \DimadUserBundle\DimadUserBundle(),
+            new Doctrine\Bundle\MigrationsBundle\DoctrineMigrationsBundle()
         ];
 
         if (in_array($this->getEnvironment(), ['dev', 'test'], true)) {

@@ -6,7 +6,7 @@ body {
     background-color: #f0f2f5;
 }
 nav {
-    background: linear-gradient(to top, #b5bdc8 0%, #828c95 36%, #859900 100%);
+    background: #444;
         .btn-floating {
             background-color: #79baea !important;
         }
@@ -41,9 +41,8 @@ nav {
 }
 .card {
     .card-head {
-        background: #859900;
         padding: 5px 10px;
-        color: white !important;
+        color: #353535 !important;
         text-align: right;
     }
     .user-block {
@@ -87,4 +86,35 @@ nav {
         margin: 15% auto; /* 15% from the top and centered */
         padding: 20px;
     }
+}
+
+.active-filter {
+    padding: 4px;
+    .active-filter-remove {
+        float: right;
+        cursor: pointer;
+    }
+}
+
+.personal-info-block {
+    .user {
+        margin: 5px;
+        color: #4B8B20;
+        font-size: 34px;
+    }
+    .actions {
+        margin: 15px;
+        div {
+            margin-top:5px;
+        }
+        a {
+            color: grey;
+        }
+    }
+}
+
+.custom-header {
+    margin: 20px;
+    font-size: 45px;
+    font-weight: bold;
 }

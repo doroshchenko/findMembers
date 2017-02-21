@@ -18,14 +18,30 @@ class HomeController extends Controller
     /**
      * @Route("/", name="homepage")
      */
-    public function indexAction()
+    public function indexAction(Request $request)
     {
-        $allEvents = $this->getDoctrine()
-            ->getRepository('AppBundle:Event')
-            ->findBy([], ['id' => 'DESC']);
+        $filters = array_keys($request->query->all());
+        $em = $this->getDoctrine()->getRepository('AppBundle:Event');
+
+        if ($filters) {
+            $qb = $em->createQueryBuilder('e');
+            $allEvents = $qb->innerJoin('e.event_tags', 't')
+                ->add('where', $qb->expr()->orX(
+                    $qb->expr()->in('t.name', $filters)
+                ))
+                ->orderBy('e.id','desc')
+                ->getQuery()
+                ->getResult();
+        } else {
+            $allEvents = $em->findAll();
+        }
+        $allTags = $this->getDoctrine()
+            ->getRepository('AppBundle:EventTag')
+            ->findAll();
 
         return $this->render('@App/default/index.html.twig', [
-            'events' => $allEvents
+            'events' => $allEvents,
+            'tags' => $allTags
         ]);
     }
 }

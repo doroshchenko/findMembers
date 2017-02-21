@@ -126,4 +126,25 @@ class EventController extends Controller
         return new JsonResponse(['ok' => true]);
     }
 
+    /**
+     * @param Request $request
+     * @Route("event/delete", name="delete_events")
+     * @Method({"POST"})
+     */
+    public function deleteEventAction(Request $request)
+    {
+        $eventId = $request->get('eventId');
+        if (!$eventId) {
+            return new JsonResponse(['error' => 'missed eventId']);
+        }
+        $event = $this->getDoctrine()->getRepository('AppBundle:Event')
+            ->find($eventId);
+
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($event);
+        $em->flush();
+
+        return new JsonResponse(['ok' => true]);
+    }
+
 }

@@ -4,14 +4,13 @@
     <div id="wrapper">
         <nav>
             <div class="nav-wrapper container">
-                <a href="{{ path("homepage") }}" class="brand-logo">findmembers.by</a>
+                <a href="{{ path("homepage") }}" class="brand-logo">findmembers</a>
                 <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
                 <ul class="right hide-on-med-and-down">
                     <li><a href="badges.html">Найти события</a></li>
                     {% if app.user %}
                         <li><a href={{ path("create-event") }}>Создать событие</a></li>
                         <li><a href="{{ path('fos_user_security_logout') }}">Выйти</a></li>
-
                     {% else %}
                         <li><a href="{{ url('ajax_login') }}" class="load-login-modal" onclick="return AuthObject.loadModal(this.href)">Войти</a></li>
                     {% endif %}
@@ -30,12 +29,14 @@
             <div class="row">
                 <div class="col s8">
                     <div class=" search-tags ">
-                        <a href="#!" >#путешествия</a>
-                        <a href="#!" >#спортивные</a>
-                        <a href="#!" >#волонтерство</a>
-                        <a href="#!" >#развлечения</a>
-                        <a href="#!" >#пойти вечером</a>
-                        <a href="#!" >#нужна помощь</a>
+                       {# {{ dump(app.request.query|keys) }}#}
+                        {% for tag in tags %}
+                            {% if tag.name in app.request.query|keys %}
+                                <a href="{{ app.request.requestUri }}">#{{ tag.name }}</a>
+                            {% else %}
+                                <a href="{{ app.request.requestUri }}{% if (app.request.query|keys) %}&{% else %}?{% endif %}{{ tag.name }}">#{{ tag.name }}</a>
+                            {% endif %}
+                        {% endfor %}
                     </div>
                     <div class="custom-header">Лента событий</div>
                     {% for event in events %}
@@ -98,16 +99,18 @@
                         <div class="actions">
                             <div>
                                 <a href="{{ path('user_events', {'id': app.user.id}) }}">Мои события</a>
-                                <span class="badge">{{ app.user.getEvents()|length }}</span>
+                                <span class="badge custom">{{ app.user.getEvents()|length }}</span>
                             </div>
-                            <div><a href="#"> Участие <span class="badge">{{ app.user.getJoinedEvents()|length }}</span></a></div>
+                            <div><a href="#"> Участие <span class="badge custom green">{{ app.user.getJoinedEvents()|length }}</span></a></div>
                             <div><a href="#">Сообщения</a></div>
                         </div>
                     </div>
                     {% endif %}
                     <div class="block">
                         <b>Активные фильтры</b>
-                        <div class="active-filter">путешествия<i class="active-filter-remove material-icons">clear</i></div>
+                        {% for tag in app.request.query|keys %}
+                            <div class="active-filter">{{ tag }}<i class="active-filter-remove material-icons" onclick="removeFilters(this)">clear</i></div>
+                        {% endfor %}
                     </div>
                 </div>
 

@@ -22,7 +22,17 @@ var Event = {
                 console.log(res);
             }
         });
+    },
+    delete: function(url, event) {
+        $.ajax({
+            url: url,
+            method: 'post',
+            success: function(res) {
 
+            },
+            error: function() {
 
+            }
+        })
     }
 };

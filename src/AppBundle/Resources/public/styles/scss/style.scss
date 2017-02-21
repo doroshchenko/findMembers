@@ -62,9 +62,11 @@ nav {
             font-size: 11px;
             color: #29b6f6 !important;
         }
-        .join-event-button {
+        .join-event-button, .edit-event-button, .delete-event-button {
             float: right;
+            margin: 0 5px;
         }
+
   }
 }
 
@@ -110,6 +112,12 @@ nav {
         a {
             color: grey;
         }
+
+        .custom {
+            color: white;
+            background-color: #5eb8f7;
+            border-radius: 15px;
+        }
     }
 }
 
@@ -117,4 +125,8 @@ nav {
     margin: 20px;
     font-size: 45px;
     font-weight: bold;
+}
+
+.btn-floating {
+    background-color: #4caf50;
 }

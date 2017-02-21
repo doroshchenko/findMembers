@@ -51,6 +51,7 @@
         });
     }
 
+
 $(document).ready(function() {
     var regions = $('#form_region option'),
         cities = $('#form_city option');

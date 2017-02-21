@@ -9,9 +9,12 @@
 namespace AppBundle\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use FOS\UserBundle\Controller\SecurityController;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Doctrine\ORM\Query;
 
 class AjaxController extends Controller
 {
@@ -32,5 +35,40 @@ class AjaxController extends Controller
             ['loginForm' => $loginForm, 'registerForm' => $registerForm]);
     }
 
+    /**
+     * @Route("ajax/regions", name="ajax_regions")
+     * @Method({"POST"})
+     */
+    public function getRegionListAction(Request $request)
+    {
+        $countryId = $request->get('countryId');
+        $em = $this->getDoctrine()->getRepository('AppBundle:Location\Region');
+        $qb = $em->createQueryBuilder('r')
+            ->where('r.country = :id')
+            ->setParameter('id', $countryId)
+            ->getQuery();
+
+        $regions = $qb->getResult(Query::HYDRATE_ARRAY);
+
+        return new JsonResponse(['regions' => $regions]);
+    }
+
+    /**
+     * @Route("ajax/cities", name="ajax_cities")
+     * @Method({"POST"})
+     */
+    public function getCityListAction(Request $request)
+    {
+        $regionId = $request->get('regionId');
+        $em = $this->getDoctrine()->getRepository('AppBundle:Location\City');
+        $qb = $em->createQueryBuilder('c')
+            ->where('c.region = :id')
+            ->setParameter('id', $regionId)
+            ->getQuery();
+
+        $cities = $qb->getResult(Query::HYDRATE_ARRAY);
+
+        return new JsonResponse(['cities' => $cities]);
+    }
 
 }

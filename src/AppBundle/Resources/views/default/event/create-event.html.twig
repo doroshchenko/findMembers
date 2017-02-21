@@ -13,22 +13,28 @@
                             'attr': { 'class': 'validate', 'id': 'title' }})
                         }}
                     </div>
-                    <div class="input-field col s6">
+                    <div>
                         {{ form_label(form.people_needed) }}
+                    </div>
+                    <div class="input-field col s6">
+                        <p class="range-field">
                         {{ form_widget(form.people_needed, {
                             'attr': { 'class': 'validate', 'min': '3', 'max': '20' }})
                         }}
+                        </p>
                     </div>
                 </div>
                 <div class="row">
+                    <div>{{ form_label(form.country, 'Место проведения') }}</div>
                     <div class="col s4">
-                        {{ form_label(form.country, 'Место проведения') }}
                         {{  form_errors(form.country) }}
-                        {{ form_widget(form.country, {'attr': {'class': 'browser-default'}}) }}
+                        {{ form_widget(form.country, {'attr': {'class': 'browser-default',
+                            'onchange':'getRegionList(this.value,"'~path("ajax_regions")~'")'}}) }}
                     </div>
                     <div class="col s4">
                         {{  form_errors(form.region) }}
-                        {{ form_widget(form.region, {'attr': {'class': 'browser-default'}}) }}
+                        {{ form_widget(form.region, {'attr': {'class': 'browser-default',
+                            'onchange':'getCityList(this.value,"'~path("ajax_cities")~'")'}}) }}
                     </div>
                     <div class="col s4">
                         {{  form_errors(form.city) }}
@@ -69,4 +75,3 @@
         </div>
     </div>
 {% endblock %}
-

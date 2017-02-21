@@ -18,7 +18,9 @@ use AppBundle\Entity\Event;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\CountryType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use AppBundle\Form\Type\EntityHiddenType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -34,17 +36,25 @@ class EventController extends Controller
     public function createAction(Request $request)
     {
         $event = new Event();
+        $author = $this->getDoctrine()->getRepository('AppBundle:User')
+            ->find($this->getUser()->getId());
+        $event->setAuthor($author);
+
         $form = $this->createFormBuilder($event)
             ->add('title', TextType::class)
-            ->add('author', EntityType::class, [
-                'class' => 'AppBundle:User', 'choice_label' => 'id'])
+            ->add('author', EntityHiddenType::class, [
+                'class' => 'AppBundle:User', 'label' => false
+                ])
             ->add('people_needed', RangeType::class, ['label' => 'Нужно человек'])
             ->add('country', EntityType::class, [
-                'class' => 'AppBundle:Location\Country', 'choice_label' => 'name'])
+                'class' => 'AppBundle:Location\Country',
+                'placeholder' => 'Страна',
+                'choice_label' => 'name'])
             ->add('region', EntityType::class, [
-                'class' => 'AppBundle:Location\Region', 'choice_label' => 'name'])
-            ->add('city', EntityType::class, [
-                'class' => 'AppBundle:Location\City', 'choice_label' => 'name'])
+                'placeholder' => 'Регион', 'class' => 'AppBundle:Location\Region',
+                'choice_label' => 'name', 'required' => false])
+            ->add('city', EntityType::class, [ 'placeholder' => 'Город', 'class' => 'AppBundle:Location\City',
+                'required' => false, 'choice_label' => 'name'])
             ->add('text', TextType::class)
             ->add('event_date_time', DateTimeType::class, ['date_widget' => 'single_text', 'time_widget' => 'single_text'])
             ->add('event_tags', null,

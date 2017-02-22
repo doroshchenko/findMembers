@@ -109,7 +109,7 @@
                     <div class="block">
                         <b>Активные фильтры</b>
                         {% for tag in app.request.query|keys %}
-                            <div class="active-filter">{{ tag }}<i class="active-filter-remove material-icons" onclick="removeFilters(this)">clear</i></div>
+                            <div class="active-filter"><span>{{ tag }}</span><i class="active-filter-remove material-icons" onclick="removeFilters(this)">clear</i></div>
                         {% endfor %}
                     </div>
                 </div>

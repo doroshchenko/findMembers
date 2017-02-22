@@ -9,6 +9,7 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\User;
+use Doctrine\ORM\EntityNotFoundException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Config\Definition\Exception\Exception;
@@ -25,6 +26,7 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use AppBundle\Form\EventType;
 
 class EventController extends Controller
 {
@@ -40,27 +42,7 @@ class EventController extends Controller
             ->find($this->getUser()->getId());
         $event->setAuthor($author);
 
-        $form = $this->createFormBuilder($event)
-            ->add('title', TextType::class)
-            ->add('author', EntityHiddenType::class, [
-                'class' => 'AppBundle:User', 'label' => false
-                ])
-            ->add('people_needed', RangeType::class, ['label' => 'Нужно человек'])
-            ->add('country', EntityType::class, [
-                'class' => 'AppBundle:Location\Country',
-                'placeholder' => 'Страна',
-                'choice_label' => 'name'])
-            ->add('region', EntityType::class, [
-                'placeholder' => 'Регион', 'class' => 'AppBundle:Location\Region',
-                'choice_label' => 'name', 'required' => false])
-            ->add('city', EntityType::class, [ 'placeholder' => 'Город', 'class' => 'AppBundle:Location\City',
-                'required' => false, 'choice_label' => 'name'])
-            ->add('text', TextType::class)
-            ->add('event_date_time', DateTimeType::class, ['date_widget' => 'single_text', 'time_widget' => 'single_text'])
-            ->add('event_tags', null,
-                ['expanded' => 'true', 'multiple' => 'true', 'choice_label' => 'name'])
-            ->add('save', SubmitType::class, array('label' => 'create event'))
-            ->getForm();
+        $form = $this->createForm(EventType::class, $event);
 
         $form->handleRequest($request);
 
@@ -74,6 +56,35 @@ class EventController extends Controller
             return $this->redirectToRoute('user_events',[
                 'id' => $event->getAuthor()->getId()
             ]);
+        }
+
+        return $this->render(
+            '@App/default/event/create-event.html.twig', [
+            'form' => $form->createView()
+        ]);
+    }
+
+    /**
+     * @param Request $request
+     * @Route("event/{eventId}/edit", requirements={"eventId": "\d+"}, name="edit_event")
+     *
+     */
+    public function editEventAction(Request $request, $eventId)
+    {
+        $event = $this->getDoctrine()->getRepository('AppBundle:Event')->find($eventId);
+        if (!$event) {
+            throw new EntityNotFoundException('event is not found');
+        }
+
+        $form = $this->createForm(EventType::class, $event);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $event = $form->getData();
+
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($event);
+            $em->flush();
         }
 
         return $this->render(
@@ -128,7 +139,7 @@ class EventController extends Controller
 
     /**
      * @param Request $request
-     * @Route("event/delete", name="delete_events")
+     * @Route("event/delete", name="delete_event")
      * @Method({"POST"})
      */
     public function deleteEventAction(Request $request)

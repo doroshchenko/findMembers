@@ -23,16 +23,23 @@ var Event = {
             }
         });
     },
-    delete: function(url, event) {
-        $.ajax({
-            url: url,
-            method: 'post',
-            success: function(res) {
-
-            },
-            error: function() {
-
-            }
-        })
+    delete: function(eventId, url) {
+        if (confirm('Are you sure?')) {
+            $.ajax({
+                url: url,
+                method: 'post',
+                data: { eventId : eventId },
+                success: function(res) {
+                    if (res.ok == true) {
+                        document.location.reload();
+                    } else {
+                        alert(res.error);
+                    }
+                },
+                error: function() {
+                    alert('server_error');
+                }
+            })
+        }
     }
 };

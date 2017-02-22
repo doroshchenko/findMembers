@@ -4,16 +4,13 @@
 
 function removeFilters(block)
 {
-    var tag = $(block).parent('.active-filter')
-        .clone()    //clone the element
-        .children() //select all the children
-        .remove()   //remove all the children
-        .end()  //again go back to selected element
-        .text();
+    var tag = $(block).siblings('span').text().replace(/_/,' ');
 
     var search = decodeURI(document.location.search);
-    if (search.search(tag)) {
+    var exists = search.search(tag);
+    if (exists) {
+        tag = search[exists - 1] + tag;
         var href = search.replace(tag, '');
-        document.location.href = href;
+        document.location.href = document.location.origin + document.location.pathname + href;
     }
 }

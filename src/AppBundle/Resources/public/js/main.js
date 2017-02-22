@@ -1,6 +1,7 @@
-/**
+/*
+/!**
  * Created by dima on 2/9/17.
- */
+ *!/
 
     function getRegionList(countryId, url, resolve = null) {
         var data = {
@@ -83,4 +84,4 @@ $(document).ready(function() {
         regions.hide();
         cities.hide();
     }
-});
+});*/

@@ -29,12 +29,12 @@
                     <div class="col s4">
                         {{  form_errors(form.country) }}
                         {{ form_widget(form.country, {'attr': {'class': 'browser-default',
-                            'onchange':'getRegionList(this.value,"'~path("ajax_regions")~'")'}}) }}
+                            'onchange':'EventForm.getRegionList(this.value,"'~path("ajax_regions")~'")'}}) }}
                     </div>
                     <div class="col s4">
                         {{  form_errors(form.region) }}
                         {{ form_widget(form.region, {'attr': {'class': 'browser-default',
-                            'onchange':'getCityList(this.value,"'~path("ajax_cities")~'")'}}) }}
+                            'onchange':'EventForm.getCityList(this.value,"'~path("ajax_cities")~'")'}}) }}
                     </div>
                     <div class="col s4">
                         {{  form_errors(form.city) }}

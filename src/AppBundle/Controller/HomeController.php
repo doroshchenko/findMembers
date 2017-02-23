@@ -26,9 +26,7 @@ class HomeController extends Controller
         if ($filters) {
             $qb = $em->createQueryBuilder('e');
             $allEvents = $qb->innerJoin('e.event_tags', 't')
-                ->add('where', $qb->expr()->orX(
-                    $qb->expr()->in('t.name', $filters)
-                ))
+                ->add('where', $qb->expr()->orX($qb->expr()->in('t.name', $filters)))
                 ->orderBy('e.id','desc')
                 ->getQuery()
                 ->getResult();

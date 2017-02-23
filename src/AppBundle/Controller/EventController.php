@@ -98,7 +98,14 @@ class EventController extends Controller
      */
     public function userEventsListAction(Request $request)
     {
-        $userId = $request->get('id');
+        if (!$this->isGranted('ROLE_USER')) {
+            return $this->redirectToRoute('homepage');
+        }
+        $userId = $this->getUser()->getId();
+        $requestId = $request->get('id');
+        if ($requestId != $userId) {
+            return $this->redirectToRoute('homepage');
+        }
         $repository = $this->getDoctrine()->getRepository('AppBundle:Event');
         $events = $repository->findBy(['author' => $userId], ['id' => 'DESC']);
         return $this->render('@App/default/event/user-events.html.twig', [

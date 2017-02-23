@@ -29,8 +29,8 @@
             <div class="row">
                 <div class="col s8">
                     <div class=" search-tags ">
-                        {{ dump(app.request.query|keys) }}
-                        {{ dump(app.request) }}
+                        {#{{ dump(app.request.query|keys) }}
+                        {{ dump(app.request) }}#}
                         {% for tag in tags %}
                             {% if tag.name in app.request.query|keys %}
                                 <a href="{{ app.request.requestUri }}">#{{ tag.name }}</a>
@@ -103,7 +103,7 @@
                                 <span class="badge custom">{{ app.user.getEvents()|length }}</span>
                             </div>
                             <div><a href="#"> Участие <span class="badge custom green">{{ app.user.getJoinedEvents()|length }}</span></a></div>
-                            <div><a href="#">Сообщения</a></div>
+                            <div><a href="{{ path("user_conversations", {'id': 1}) }}">Сообщения</a></div>
                         </div>
                     </div>
                     {% endif %}

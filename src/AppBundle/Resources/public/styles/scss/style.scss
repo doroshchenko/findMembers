@@ -130,3 +130,39 @@ nav {
 .btn-floating {
     background-color: #4caf50;
 }
+
+.conversation-row {
+
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-bottom: 10px;
+    position: relative;
+
+    .conversation-title {
+        display: inline-block;
+        position: relative;
+        top: -7px;
+        margin-left: 10px;
+    }
+    .conversation-last-message {
+        position: relative;
+        left: 6%;
+        top: -13px;
+        color: grey;
+        font-size: 13px;
+        background: whitesmoke;
+        padding: 12px;
+        width: 82%;
+    }
+
+    .message-remove {
+        position: absolute;
+        right: 1%;
+        top: 4%;
+        cursor: pointer;
+        color: grey;
+        font-size: 30px;
+    }
+
+}

@@ -1,0 +1,16 @@
+{% extends '@App/default/index.html.twig' %}
+
+{% block content %}
+    <div class="container">
+        <h4>Диалоги</h4>
+        <div class="col m5 offset-s2 block">
+            {% for message in messages %}
+                    <div>
+                        <div>{{ message.author.userName }}</div>
+                        <div>{{ message.text }}</div>
+                        <span>{{ message.createdAt|date }}</span>
+                    </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

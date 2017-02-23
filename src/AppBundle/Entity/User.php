@@ -31,6 +31,19 @@ class User extends BaseUser
      */
     private $joined_events = null;
 
+    /**
+     * @var null
+     * @ORM\ManyToMany(targetEntity="UserConversation", inversedBy="users")
+     * @ORM\JoinTable(name="user_conversation_relations")
+     */
+    private $conversations = null;
+
+    /**
+     * @var null
+     * @ORM\OneToMany(targetEntity="UserMessage", mappedBy="author")
+     */
+    private $messages = null;
+
     public function __construct()
     {
         parent::__construct();
@@ -38,10 +51,9 @@ class User extends BaseUser
 
         $this->events = new ArrayCollection();
         $this->joined_events = new ArrayCollection();
-
+        $this->conversations = new ArrayCollection();
+        $this->messages = new ArrayCollection();
     }
-
-
 
     /**
      * Add event
@@ -109,5 +121,73 @@ class User extends BaseUser
     public function getJoinedEvents()
     {
         return $this->joined_events;
+    }
+
+    /**
+     * Add conversation
+     *
+     * @param \AppBundle\Entity\UserConversation $conversation
+     *
+     * @return User
+     */
+    public function addConversation(\AppBundle\Entity\UserConversation $conversation)
+    {
+        $this->conversations[] = $conversation;
+
+        return $this;
+    }
+
+    /**
+     * Remove conversation
+     *
+     * @param \AppBundle\Entity\UserConversation $conversation
+     */
+    public function removeConversation(\AppBundle\Entity\UserConversation $conversation)
+    {
+        $this->conversations->removeElement($conversation);
+    }
+
+    /**
+     * Get conversations
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getConversations()
+    {
+        return $this->conversations;
+    }
+
+    /**
+     * Add message
+     *
+     * @param \AppBundle\Entity\UserMessage $message
+     *
+     * @return User
+     */
+    public function addMessage(\AppBundle\Entity\UserMessage $message)
+    {
+        $this->messages[] = $message;
+
+        return $this;
+    }
+
+    /**
+     * Remove message
+     *
+     * @param \AppBundle\Entity\UserMessage $message
+     */
+    public function removeMessage(\AppBundle\Entity\UserMessage $message)
+    {
+        $this->messages->removeElement($message);
+    }
+
+    /**
+     * Get messages
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getMessages()
+    {
+        return $this->messages;
     }
 }

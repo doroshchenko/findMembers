@@ -1,0 +1,22 @@
+{% extends '@App/default/index.html.twig' %}
+
+{% block content %}
+    <div class="container">
+        <h4>Диалоги</h4>
+        <div class="col m5 offset-s2 block">
+            {% for conversation in conversations %}
+                <div class="conversation-row">
+                    <div class="btn-floating btn user-icon"></div>
+                    <div class="conversation-title"><b>{{ conversation.getTitle() }}</b></div>
+                    {% set lastMessage = conversation.getMessages() %}
+                    {% for message in conversation.getMessages() %}
+                        {% if loop.last %}
+                            <div class="conversation-last-message "><a href="{{ path("conversation", {'idUser': app.user.id,'idConversation':conversation.id }) }}">{{ message.text }}</a></div>
+                            <i class="message-remove material-icons">clear</i>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

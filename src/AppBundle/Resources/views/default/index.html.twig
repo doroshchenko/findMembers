@@ -100,10 +100,14 @@
                         <div class="actions">
                             <div>
                                 <a href="{{ path('user_events', {'id': app.user.id}) }}">Мои события</a>
-                                <span class="badge custom">{{ app.user.getEvents()|length }}</span>
+                                <span class="badge">{{ app.user.getEvents()|length }}</span>
                             </div>
-                            <div><a href="#"> Участие <span class="badge custom green">{{ app.user.getJoinedEvents()|length }}</span></a></div>
-                            <div><a href="{{ path("user_conversations", {'id': 1}) }}">Сообщения</a></div>
+                            <div><a href="#"> Участие <span class="badge">{{ app.user.getJoinedEvents()|length }}</span></a></div>
+                            <div><a href="{{ path("user_conversations", {'id': app.user.id}) }}">Сообщения</a>
+                                {% if unreadMsg > 0 %}
+                                    <span class="badge custom">{{ unreadMsg }}</span>
+                                {% endif %}
+                            </div>
                         </div>
                     </div>
                     {% endif %}

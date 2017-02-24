@@ -20,8 +20,8 @@ class HomeController extends Controller
      */
     public function indexAction(Request $request)
     {
-        $filters = array_keys($request->query->all());
         $em = $this->getDoctrine()->getRepository('AppBundle:Event');
+        $filters = array_keys($request->query->all());
 
         if ($filters) {
             $qb = $em->createQueryBuilder('e');
@@ -33,13 +33,20 @@ class HomeController extends Controller
         } else {
             $allEvents = $em->findAll();
         }
+
         $allTags = $this->getDoctrine()
             ->getRepository('AppBundle:EventTag')
             ->findAll();
+        $unreadMsg = ($this->getUser())
+            ? $unreadMsg = $this->getDoctrine()
+                ->getRepository('AppBundle:User')
+                ->countUnreadMessages($this->getUser())
+            : 0;
 
         return $this->render('@App/default/index.html.twig', [
             'events' => $allEvents,
-            'tags' => $allTags
+            'tags' => $allTags,
+            'unreadMsg' => $unreadMsg
         ]);
     }
 }

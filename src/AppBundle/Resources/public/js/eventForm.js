@@ -22,7 +22,7 @@ var EventForm = {
         if (countrySelected) {
             let promise = new Promise((resolve,reject) => {
                 that.getRegionList(countrySelected, '/web/app_dev.php/ajax/regions', resolve);  });
-            promise.then( result => {
+            promise.then( function() {
                 if (regionSelected) {
                     var regions = $(this.config.selectors.region + 'option');
                     $.each(regions, function(i, val) {
@@ -34,7 +34,7 @@ var EventForm = {
                 } else {
                     cities.hide();
                 }
-            }, error => {
+            }, function(error) {
                 alert("Rejected: " + error);
             });
         } else {

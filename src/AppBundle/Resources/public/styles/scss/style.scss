@@ -166,3 +166,27 @@ nav {
     }
 
 }
+
+.message-box {
+    position: relative;
+    margin: 10px;
+    .author {
+        position: relative;
+        left: 6%;
+        top: -43px;
+        font-weight: bold;
+    }
+    .message {
+        position: relative;
+        left: 6%;
+        top: -25px;
+        color: grey;
+        font-size: 13px;
+        margin: 11px;
+
+    }
+    .created {
+        font-size: 10px;
+        color: black;
+    }
+}

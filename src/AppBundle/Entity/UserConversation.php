@@ -89,6 +89,17 @@ class UserConversation
         $this->users->removeElement($user);
     }
 
+    public function hasUser(\AppBundle\Entity\User $user)
+    {
+        foreach ($this->users as $member) {
+            if($member->getId() == $user->getId()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     /**
      * Get users
      *

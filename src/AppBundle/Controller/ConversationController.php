@@ -9,6 +9,7 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\User;
+use AppBundle\Entity\UserMessage;
 use Doctrine\ORM\EntityNotFoundException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -26,7 +27,7 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use AppBundle\Form\EventType;
+use AppBundle\Form\MessageType;
 
 
 class ConversationController extends Controller
@@ -37,7 +38,7 @@ class ConversationController extends Controller
     public function listAction(Request $request, $id)
     {
         $user = $this->getDoctrine()->getRepository('AppBundle:User')
-            ->find(2);
+            ->find($id);
         $conversations = $user->getConversations();
 
         return $this->render('@App/default/user-cabinet/user-conversations.html.twig', [
@@ -53,10 +54,74 @@ class ConversationController extends Controller
     {
         $conversation = $this->getDoctrine()->getRepository('AppBundle:UserConversation')
             ->find($idConversation);
+        $user = $this->getDoctrine()->getRepository('AppBundle:User')
+            ->find($idUser);
+
+        if (!$conversation || !$user) {
+            throw new Exception();
+        }
+        if (!$conversation->hasUser($user)) {
+            throw new Exception();
+        }
+
         $messages = $conversation->getMessages();
 
+        $message = new UserMessage();
+        $message->setConversation($conversation)
+            ->setAuthor($this->getUser())
+            ->setIsRead(false)
+            ->setCreatedAt(new \DateTime("now"));
+
+        $form = $this->createForm(MessageType::class, $message);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $message = $form->getData();
+
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($message);
+            $em->flush();
+
+            return $this->redirectToRoute('conversation',
+                ['idUser' => $idUser, 'idConversation' => $idConversation]
+            );
+        }
+
         return $this->render('@App/default/user-cabinet/conversation.html.twig', [
-            'messages' => $messages
+            'messages' => $messages,
+            'form' => $form->createView()
         ]);
+    }
+    /**
+     * @Route("user/{idUser}/conversation/{idConversation}/save",
+     *      requirements={"idUser" : "\d+", "idConversation": "\d+"}, name="conversation_message_save")
+     */
+    public function  saveMessageAction(Request $request, $idUser, $idConversation)
+    {
+        $conversation = $this->getDoctrine()->getRepository('AppBundle:UserConversation')
+            ->find($idConversation);
+
+        $message = new UserMessage();
+        $message->setConversation($conversation)
+            ->setAuthor($this->getUser())
+            ->setIsRead(false)
+            ->setCreatedAt(new \DateTime("now"));
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($message);
+        $em->flush();
+
+        $form = $this->createForm(MessageType::class, $message);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $message = $form->getData();
+
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($message);
+            $em->flush();
+        }
+
+        return $this->redirectToRoute('conversation',
+            ['idUser' => $idUser, 'idConversation' => $idConversation]
+        );
     }
 }

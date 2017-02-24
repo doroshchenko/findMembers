@@ -5,12 +5,25 @@
         <h4>Диалоги</h4>
         <div class="col m5 offset-s2 block">
             {% for message in messages %}
-                    <div>
-                        <div>{{ message.author.userName }}</div>
-                        <div>{{ message.text }}</div>
-                        <span>{{ message.createdAt|date }}</span>
+                <div class="message-box">
+                    <div class="btn-floating btn user-icon"></div>
+                    <div class="author">{{ message.author.userName }}</div>
+                    <div class="message">
+                        <div class="created"> {{ message.createdAt|date }}</div>
+                        {{ message.text }}
                     </div>
+                </div>
             {% endfor %}
+            {{ form_start(form) }}
+            {{ form_widget(form) }}
+            {{ form_end(form) }}
+        </div>
+        <div>
+
+            {#<form method="post" action="{{ path("conversation_message_save", {'idUser': app.user.id,'idConversation': app.request.get("idConversation") }) }}">
+                <textarea name="usermessage" col="4" rows="3" placeholder="ваше сообщение"></textarea>
+                <input type="submit" value="отправить">
+            </form>#}
         </div>
     </div>
 {% endblock %}

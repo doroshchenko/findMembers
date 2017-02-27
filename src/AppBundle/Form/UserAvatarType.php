@@ -2,8 +2,8 @@
 /**
  * Created by PhpStorm.
  * User: dima
- * Date: 2/24/17
- * Time: 9:03 AM
+ * Date: 2/27/17
+ * Time: 6:20 PM
  */
 
 namespace AppBundle\Form;
@@ -22,24 +22,21 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use AppBundle\Entity\User;
 use AppBundle\Entity\UserConversation;
 use AppBundle\Entity\UserMessage;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 
-class MessageType extends AbstractType
+class UserAvatarType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('conversation', EntityHiddenType::class, [
-                'class' => 'AppBundle:UserConversation', 'label' => false ])
-            ->add('author', EntityHiddenType::class, [
-                'class' => 'AppBundle:User', 'label' => false  ])
-            ->add('text', TextareaType::class, [ 'required' =>true, 'label' => false ])
+            ->add('image', FileType::class, ['label' => false ])
             ->add('save', SubmitType::class, array('label' => 'отправить'));
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => UserMessage::class,
+            'data_class' => User::class,
         ));
     }
 }

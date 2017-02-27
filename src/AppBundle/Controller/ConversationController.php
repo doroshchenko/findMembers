@@ -33,6 +33,7 @@ use AppBundle\Form\MessageType;
 class ConversationController extends Controller
 {
     /**
+     * show all user's dialogs
      * @Route("user/{id}/conversations", requirements={"id" : "\d+"}, name="user_conversations")
      */
     public function listAction(Request $request, $id)
@@ -47,6 +48,8 @@ class ConversationController extends Controller
     }
 
     /**
+     * show conversation
+     *
      * @Route("user/{idUser}/conversation/{idConversation}",
      *      requirements={"idUser" : "\d+", "idConversation": "\d+"}, name="conversation")
      */
@@ -105,9 +108,6 @@ class ConversationController extends Controller
             ->setAuthor($this->getUser())
             ->setIsRead(false)
             ->setCreatedAt(new \DateTime("now"));
-        $em = $this->getDoctrine()->getManager();
-        $em->persist($message);
-        $em->flush();
 
         $form = $this->createForm(MessageType::class, $message);
         $form->handleRequest($request);
@@ -123,5 +123,32 @@ class ConversationController extends Controller
         return $this->redirectToRoute('conversation',
             ['idUser' => $idUser, 'idConversation' => $idConversation]
         );
+    }
+
+    /**
+     * @param Request $request
+     * @param $messageId
+     * @Route("/message/{idMessage}/read", requirements={"idMessage": "\d+"},
+     *      options = { "expose" = true },
+     *      name="read-message")
+     * @Method({"POST"})
+     * @return JsonResponse
+     */
+    public function markMessageAsRead(Request $request, $idMessage)
+    {
+        $message = $this->getDoctrine()->getRepository('AppBundle:UserMessage')
+            ->find($idMessage);
+
+        $message->setIsRead(true);
+        $em = $this->getDoctrine()->getManager();
+        try {
+            $em->persist($message);
+            $em->flush();
+
+        } catch (\Exception $e ) {
+            return new JsonResponse(['error' => $e->getMessage()]);
+        }
+
+        return new JsonResponse(['ok' => true]);
     }
 }

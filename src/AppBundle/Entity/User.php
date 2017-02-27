@@ -5,6 +5,7 @@ namespace AppBundle\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use FOS\UserBundle\Model\User as BaseUser;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity
@@ -34,10 +35,21 @@ class User extends BaseUser
 
     /**
      * @var null
-     * @ORM\ManyToMany(targetEntity="UserConversation", inversedBy="users")
-     * @ORM\JoinTable(name="user_conversation_relations")
+     * @ORM\ManyToMany(targetEntity="UserConversation", mappedBy="users")
+     *
      */
     private $conversations = null;
+
+    /**
+     * @ORM\Column(type="string", options={"default":null})
+     * @Assert\File(
+     *     maxSize = "5M",
+     *     mimeTypes = {"image/jpeg", "image/gif", "image/png", "image/tiff"},
+     *     maxSizeMessage = "The maxmimum allowed file size is 5MB.",
+     *     mimeTypesMessage = "Only the filetypes image are allowed."
+     * )
+     */
+    private $image;
 
     /**
      * @var null
@@ -190,5 +202,17 @@ class User extends BaseUser
     public function getMessages()
     {
         return $this->messages;
+    }
+
+    public function setImage($image)
+    {
+       $this->image = $image;
+
+        return $this->image;
+    }
+
+    public function getImage()
+    {
+        return $this->image;
     }
 }

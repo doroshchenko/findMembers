@@ -19,7 +19,7 @@ class UserRepository extends  EntityRepository
 
     public function countUnreadMessages(\AppBundle\Entity\User $user)
     {
-        $messages =  $this
+        return $this
             ->createQueryBuilder('u')
             ->select('count(m.id)')
             ->innerJoin('u.conversations', 'c')
@@ -30,7 +30,5 @@ class UserRepository extends  EntityRepository
             ->getQuery()
             ->getSingleScalarResult();
 
-
-        return $messages;
     }
 }

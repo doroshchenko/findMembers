@@ -7,7 +7,14 @@
             {% for conversation in conversations %}
                 <div class="conversation-row">
                     <div class="btn-floating btn user-icon"></div>
-                    <div class="conversation-title"><b>{{ conversation.getTitle() }}</b></div>
+                    {% set users = conversation.getUsers() %}
+                    <div class="conversation-title"><b>
+                        {% for user in users %}
+                            {% if user.id != app.user.id %}
+                            {{ user.userName }}
+                            {% endif %}
+                        {% endfor %}
+                        </b></div>
                     {% set lastMessage = conversation.getMessages() %}
                     {% for message in conversation.getMessages() %}
                         {% if loop.last %}

@@ -21,7 +21,7 @@ var EventForm = {
         var that = this;
         if (countrySelected) {
             let promise = new Promise((resolve,reject) => {
-                that.getRegionList(countrySelected, '/web/app_dev.php/ajax/regions', resolve);  });
+                that.getRegionList(countrySelected, Routing.generate('ajax_regions'), resolve);  });
             promise.then( function() {
                 if (regionSelected) {
                     var regions = $(this.config.selectors.region + 'option');
@@ -30,7 +30,7 @@ var EventForm = {
                             $(val).attr('selected','selected');
                         }
                     });
-                    getCityList(regionSelected,'/web/app_dev.php/ajax/cities');
+                    getCityList(regionSelected, Routing.generate('ajax_cities'));
                 } else {
                     cities.hide();
                 }

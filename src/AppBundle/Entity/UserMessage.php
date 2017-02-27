@@ -27,7 +27,7 @@ class UserMessage
 
     /**
      * @var
-     * @ORM\ManyToOne(targetEntity="UserConversation", inversedBy="messages")
+     * @ORM\ManyToOne(targetEntity="UserConversation", inversedBy="messages", cascade={"persist", "remove" })
      */
     private $conversation;
 
@@ -187,4 +187,5 @@ class UserMessage
     {
         return $this->author;
     }
+
 }

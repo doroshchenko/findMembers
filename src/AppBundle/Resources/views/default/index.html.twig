@@ -39,7 +39,7 @@
                             {% endif %}
                         {% endfor %}
                     </div>
-                    <div class="custom-header">Лента событий</div>
+                    <div class="custom-header">Создай свое мероприятия или прими участие</div>
                     {% for event in events %}
                         <div class="card ">
                             <div class="card-head">
@@ -73,7 +73,7 @@
                                 <div class="user-block">
                                     <a class="btn-floating btn user-icon">
                                     </a>
-                                    <a href="#" style="margin-left: 5px;">{{ event.getAuthor.getUsername }}</a>
+                                    <a href="{{ path("user_profile", {'id': event.getAuthor.id }) }}" style="margin-left: 5px;">{{ event.getAuthor.getUsername }}</a>
                                     <p class="event-info"> <span class="chip" >{{ event.city.name }}</span>
                                         {% if date(event.eventDateTime) > date() %}
                                             {% set difference = date(event.eventDateTime).diff(date()) %}
@@ -94,7 +94,15 @@
                     {% if app.user %}
                     <div class="block personal-info-block">
                         <div class="user">
-                            <a href="{{ path('user_events', {'id': app.user.id}) }}" class="btn-floating btn user-icon"></a>
+                            <div class="user-icon" style="background-image:
+                                    url({% if app.user.image|length %}
+                                {{ ('images/users/'~app.user.image|split('/')|last)| imagine_filter('my_thumb') }}
+                            {% else %}
+                                {{ asset('images/users/default-avatar.jpg') }}
+                            {% endif %}
+                                    );">
+                                <a href="{{ path('user_events', {'id': app.user.id}) }}"></a>
+                            </div>
                             {{ app.user }}
                         </div>
                         <div class="actions">
@@ -135,6 +143,8 @@
         '@AppBundle/Resources/public/datetimepicker-master/build/jquery.datetimepicker.full.min.js'
         output='js/compiled/main.js' %}
     <script src="{{ asset_url }}"></script>
+    <script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
+    <script src="{{ path('fos_js_routing_js', { callback: 'fos.Router.setData' }) }}"></script>
     {% endjavascripts %}
 {% endblock %}
 

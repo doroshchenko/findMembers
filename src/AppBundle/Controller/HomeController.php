@@ -31,7 +31,7 @@ class HomeController extends Controller
                 ->getQuery()
                 ->getResult();
         } else {
-            $allEvents = $em->findAll();
+            $allEvents = $em->findBy([], ['id' => 'desc']);
         }
 
         $allTags = $this->getDoctrine()

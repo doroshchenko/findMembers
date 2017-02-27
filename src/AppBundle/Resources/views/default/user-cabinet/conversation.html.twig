@@ -2,15 +2,19 @@
 
 {% block content %}
     <div class="container">
-        <h4>Диалоги</h4>
+        <h4><a href="{{ path("user_conversations", {id: app.user.id}) }}">Диалоги</a></h4>
         <div class="col m5 offset-s2 block">
-            {% for message in messages %}
+            {% for key,message in messages %}
+                {% set prevAuthor = messages[key - 1].author|default(messages[0].author) %}
+                {% set author = message.author %}
                 <div class="message-box">
+                {% if author.userName != prevAuthor.userName or key == 0 %}
                     <div class="btn-floating btn user-icon"></div>
                     <div class="author">{{ message.author.userName }}</div>
-                    <div class="message">
+                {% endif %}
+                    <div id="msg-{{ message.id }}" class="message {% if message.isRead == 0 and message.author != app.user %}unread{% endif %}">
                         <div class="created"> {{ message.createdAt|date }}</div>
-                        {{ message.text }}
+                        <span>{{ message.text|raw }}</span>
                     </div>
                 </div>
             {% endfor %}
@@ -26,4 +30,12 @@
             </form>#}
         </div>
     </div>
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    {% javascripts
+    '@AppBundle/Resources/public/js/user/conversation.js'
+    output='js/compiled/conversation.js' %}
+    <script src="{{ asset_url }}"></script>
+    {% endjavascripts %}
 {% endblock %}

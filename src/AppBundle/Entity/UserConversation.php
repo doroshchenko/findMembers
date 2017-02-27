@@ -39,7 +39,8 @@ class UserConversation
     protected $createdAt;
 
     /**
-     * @ORM\ManyToMany(targetEntity="User", mappedBy="conversations")
+     * @ORM\ManyToMany(targetEntity="User", inversedBy="conversations")
+     * @ORM\JoinTable(name="user_conversation_relations")
      */
     private $users;
 

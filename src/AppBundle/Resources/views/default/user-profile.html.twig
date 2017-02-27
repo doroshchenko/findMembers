@@ -1,0 +1,52 @@
+{% extends '@App/default/index.html.twig' %}
+
+{% block content %}
+    <div class="container profile">
+        <div class="user-name">
+            <div class="user-photo">
+                {#<div class="user-icon" style="background-image: url({{ asset('images/users/user-'~app.user.id~'.jpg') }});"></div>#}
+                <div class="user-profile-icon" style="background-image:
+                        url({% if user.image|length %}
+                            {{ ('images/users/'~user.image|split('/')|last)| imagine_filter('my_thumb') }}
+                            {% else %}
+                            {{ asset('images/users/default-avatar.jpg') }}
+                            {% endif %}
+                        );"></div>
+                {#{% image '@AppBundle/Resources/public/images/example.jpg' %}
+                <img src="{{ asset_url }}" alt="Example" />
+                {% endimage %}#}
+            </div>
+            <div class="name">{{ user.userName }}</div>
+            {% if app.user and app.user.id != app.request.get('id') %}
+                <a class="show-message-form" href="#">написать сообщение</a>
+                <div class="message-form">
+                    {{ form_start(form) }}
+                    {{ form_widget(form) }}
+                    {{ form_end(form) }}
+                </div>
+            {% elseif app.user %}
+                <a href="#" class="upload-avatar">Загрузить аватар</a>
+                <div class="upload-avatar-form">
+                    {{ form_start(avatarForm) }}
+                    <div class="file-field input-field">
+                        <div class="btn">
+                            <span>File</span>
+                            {{ form_widget(avatarForm.image) }}
+                        </div>
+                        <div class="file-path-wrapper">
+                            <input class="file-path validate" type="text">
+                        </div>
+                    </div>
+                    {{ form_end(avatarForm) }}
+                </div>
+            {% endif %}
+        </div>
+        <div class="user-info">
+            <ul>
+                <li>Cобытия</li>
+                <li>Участвует</li>
+                <li>Контакты</li>
+            </ul>
+        </div>
+    </div>
+{% endblock %}

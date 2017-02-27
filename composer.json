@@ -25,7 +25,10 @@
         "symfony/assetic-bundle": "^2.8",
         "leafo/scssphp": "^0.6.6",
         "patchwork/jsqueeze": "^2.0",
-        "friendsofsymfony/user-bundle": "~2.0@dev"
+        "friendsofsymfony/user-bundle": "~2.0@dev",
+        "friendsofsymfony/jsrouting-bundle": "^1.6",
+        "vich/uploader-bundle": "^1.4",
+        "liip/imagine-bundle": "^1.7"
     },
     "require-dev": {
         "sensio/generator-bundle": "^3.0",

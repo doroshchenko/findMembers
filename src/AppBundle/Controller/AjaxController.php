@@ -36,7 +36,7 @@ class AjaxController extends Controller
     }
 
     /**
-     * @Route("ajax/regions", name="ajax_regions")
+     * @Route("ajax/regions", name="ajax_regions", options = { "expose" = true })
      * @Method({"POST"})
      */
     public function getRegionListAction(Request $request)
@@ -54,7 +54,7 @@ class AjaxController extends Controller
     }
 
     /**
-     * @Route("ajax/cities", name="ajax_cities")
+     * @Route("ajax/cities", name="ajax_cities", options = { "expose" = true })
      * @Method({"POST"})
      */
     public function getCityListAction(Request $request)

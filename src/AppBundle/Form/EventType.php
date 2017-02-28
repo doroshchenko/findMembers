@@ -14,6 +14,7 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use AppBundle\Form\Type\EntityHiddenType;
 use Symfony\Component\Form\Extension\Core\Type\RangeType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -38,7 +39,7 @@ class EventType extends AbstractType
                 'choice_label' => 'name', 'required' => false])
             ->add('city', EntityType::class, [ 'placeholder' => 'Город', 'class' => 'AppBundle:Location\City',
                 'required' => false, 'choice_label' => 'name'])
-            ->add('text', TextType::class)
+            ->add('text', TextAreaType::class)
             ->add('event_date_time', DateTimeType::class, ['date_widget' => 'single_text', 'time_widget' => 'single_text'])
             ->add('event_tags', null,
                 ['expanded' => 'true', 'multiple' => 'true', 'choice_label' => 'name'])

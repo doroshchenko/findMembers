@@ -7,5 +7,9 @@
         $('.upload-avatar').click(function(){
             $('.upload-avatar-form').slideToggle();
         });
+
+        $(document).ready(function() {
+            $('select').material_select();
+        });
     });
 })(jQuery);

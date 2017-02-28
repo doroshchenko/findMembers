@@ -6,11 +6,20 @@
         <div class="col m5 offset-s2 block">
             {% for conversation in conversations %}
                 <div class="conversation-row">
-                    <div class="btn-floating btn user-icon"></div>
                     {% set users = conversation.getUsers() %}
                     <div class="conversation-title"><b>
                         {% for user in users %}
                             {% if user.id != app.user.id %}
+                                <a href="{{ path('user_profile', {'id': user.id}) }}">
+                                    <div class="user-icon" style="background-image:
+                                            url({% if user.image|length %}
+                                        {{ ('images/users/'~user.image)| imagine_filter('user_icon_thumb') }}
+                                    {% else %}
+                                        {{ asset('images/users/default-avatar.jpg') }}
+                                    {% endif %}
+                                            );">
+                                    </div>
+                                </a>
                             {{ user.userName }}
                             {% endif %}
                         {% endfor %}

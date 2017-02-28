@@ -7,20 +7,13 @@
                 <a href="{{ path("homepage") }}" class="brand-logo">findmembers</a>
                 <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
                 <ul class="right hide-on-med-and-down">
-                    <li><a href="badges.html">Найти события</a></li>
+                    <li><a href="{{ path('find-event') }}">Найти события</a></li>
                     {% if app.user %}
                         <li><a href={{ path("create-event") }}>Создать событие</a></li>
                         <li><a href="{{ path('fos_user_security_logout') }}">Выйти</a></li>
                     {% else %}
                         <li><a href="{{ url('ajax_login') }}" class="load-login-modal" onclick="return AuthObject.loadModal(this.href)">Войти</a></li>
                     {% endif %}
-                </ul>
-                <ul class="side-nav" id="mobile-demo">
-                    <li><a href="sass.html">Sass</a></li>
-                    <li><a href="badges.html">Components</a></li>
-                    <li><a href="collapsible.html">Javascript</a></li>
-                    <li><a href="mobile.html">Mobile</a></li>
-
                 </ul>
             </div>
         </nav>
@@ -50,7 +43,7 @@
                         </span>
                             </div>
                             <div class="card-content">
-                                <span class="card-title"><a href="#">{{ event.title }}</a></span>
+                                <span class="card-title"><a href="{{ path("event", {'idEvent': event.id}) }}">{{ event.title }}</a></span>
                                 <div class="post_created">{{ event.createdAt|date('Y-m-d') }}</div>
                                 <p>{{ event.text }}
                                 </p>
@@ -71,9 +64,17 @@
                             </div>
                             <div class="card-action">
                                 <div class="user-block">
-                                    <a class="btn-floating btn user-icon">
+                                    <a href="{{ path('user_profile', {'id': event.getAuthor.id}) }}">
+                                        <div class="user-icon" style="background-image:
+                                                url({% if event.getAuthor.image|length %}
+                                            {{ ('images/users/'~event.getAuthor.image)| imagine_filter('user_icon_thumb') }}
+                                        {% else %}
+                                            {{ asset('images/users/default-avatar.jpg') }}
+                                        {% endif %}
+                                                );">
+                                        </div>
                                     </a>
-                                    <a href="{{ path("user_profile", {'id': event.getAuthor.id }) }}" style="margin-left: 5px;">{{ event.getAuthor.getUsername }}</a>
+                                    <a class="event-author" href="{{ path("user_profile", {'id': event.getAuthor.id }) }}">{{ event.getAuthor.getUsername }}</a>
                                     <p class="event-info"> <span class="chip" >{{ event.city.name }}</span>
                                         {% if date(event.eventDateTime) > date() %}
                                             {% set difference = date(event.eventDateTime).diff(date()) %}
@@ -94,15 +95,16 @@
                     {% if app.user %}
                     <div class="block personal-info-block">
                         <div class="user">
-                            <div class="user-icon" style="background-image:
+                            <a href="{{ path('user_profile', {'id': app.user.id}) }}">
+                                <div class="user-icon" style="background-image:
                                     url({% if app.user.image|length %}
-                                {{ ('images/users/'~app.user.image|split('/')|last)| imagine_filter('my_thumb') }}
+                                {{ ('images/users/'~app.user.image)| imagine_filter('user_icon_thumb') }}
                             {% else %}
                                 {{ asset('images/users/default-avatar.jpg') }}
                             {% endif %}
                                     );">
-                                <a href="{{ path('user_events', {'id': app.user.id}) }}"></a>
                             </div>
+                            </a>
                             {{ app.user }}
                         </div>
                         <div class="actions">

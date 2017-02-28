@@ -1,0 +1,118 @@
+{% extends '@App/default/index.html.twig' %}
+
+{% block content %}
+<div class="container">
+    <div class=" col m12 block">
+        <div class="event-view-wrap">
+        <div class="event-filter-form">
+        {#    <form> #} {{ form_start(form) }}
+                <h4> Поиск событий</h4>
+                <div class="row">
+                    <div class="input-field col s12 m3">
+                        {#<select multiple>
+                            <option  disabled selected>Выберите теги</option>
+                            {% for tag in searchOptions.tags %}
+                                <option value="{{ tag.id }}">{{ tag.name }}</option>
+                            {% endfor %}
+                        </select>
+                        <label>#Тег</label>#}
+
+                        {{ form_widget(form.tags, {'attr': {'multiple': 'multiple'}}) }}
+                        <label>#Тег</label>
+
+                    </div>
+                    <div class="input-field col s12 m3">
+                       {# <select>
+                            <option  disabled selected>Выберите страну</option>
+                            {% for country in searchOptions.countries %}
+                                <option value="{{ country.id }}">{{ country.name }}</option>
+                            {% endfor %}
+                        </select>#}
+                        {{ form_widget(form.country) }}
+                        <label>#Страна</label>
+                    </div>
+                    <div class="input-field col s12 m3">
+                        {{ form_widget(form.membersRanges) }}
+                        <label>#Участники</label>
+                    </div>
+                    <div class="input-field col s12 m3">
+                        {{ form_widget(form.startRanges) }}
+                        <label>#Время</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s12">
+                        {{ form_widget(form.textSearch) }}
+                        <label for="first_name">Поиск по тексту</label>
+                    </div>
+                </div>
+                <div>
+                    <button class="btn waves-effect waves-light" type="submit" name="action">Искать
+                        <i class="material-icons right">send</i>
+                    </button>
+                </div>
+            {{ form_end(form) }} {#</form>#}
+
+
+        </div>
+            {% for event in events %}
+                <div class="card ">
+                    <div class="card-head">
+                        <span>
+                            {% for tag in event.getEventTags() %}
+                                #{{ tag.name }}
+                            {% endfor %}
+                        </span>
+                    </div>
+                    <div class="card-content">
+                        <span class="card-title"><a href="{{ path("event", {'idEvent': event.id}) }}">{{ event.title }}</a></span>
+                        <div class="post_created">{{ event.createdAt|date('Y-m-d') }}</div>
+                        <p>{{ event.text }}
+                        </p>
+                        <p class="event-people">
+                            колво людей всего: {{ event.peopleNeeded }} <span> требуется еще: {{ event.peopleNeeded - event.getMembers()|length }} чел</span>
+                        </p>
+                        {% if date(event.eventDateTime) > date()  and app.user%}
+                            {# join or leave event on click #}
+                            <a class="btn-floating  waves-effect waves-light join-event-button"
+                               onclick="Event.join('{{ path('join_event')}}', '{{ event.id }}', '{{ app.user.id }}')">
+                                <i class="material-icons">
+                                    {% if event.isMember(app.user) %} remove
+                                    {% else %} add
+                                    {% endif %}
+                                </i>
+                            </a>
+                        {% endif %}
+                    </div>
+                    <div class="card-action">
+                        <div class="user-block">
+                            <a href="{{ path('user_profile', {'id': event.getAuthor.id}) }}">
+                                <div class="user-icon" style="background-image:
+                                        url({% if event.getAuthor.image|length %}
+                                    {{ ('images/users/'~event.getAuthor.image)| imagine_filter('user_icon_thumb') }}
+                                {% else %}
+                                    {{ asset('images/users/default-avatar.jpg') }}
+                                {% endif %}
+                                        );">
+                                </div>
+                            </a>
+                            <a class="event-author" href="{{ path("user_profile", {'id': event.getAuthor.id }) }}">{{ event.getAuthor.getUsername }}</a>
+                            <p class="event-info"> <span class="chip" >{{ event.city.name }}</span>
+                                {% if date(event.eventDateTime) > date() %}
+                                    {% set difference = date(event.eventDateTime).diff(date()) %}
+                                    {% set leftDays = difference.days %}
+                                    <span class="chip"> начало через:
+                                        {{ difference.d }} дней {{ difference.h }} ч</span>
+                                {% else %}
+                                    <span class="chip">завершено</span>
+                                {% endif %}
+
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

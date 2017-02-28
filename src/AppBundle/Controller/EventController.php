@@ -8,6 +8,7 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Entity\EventTag;
 use AppBundle\Entity\User;
 use Doctrine\ORM\EntityNotFoundException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -27,6 +28,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use AppBundle\Form\EventType;
+use Doctrine\ORM\Query;
 
 class EventController extends Controller
 {
@@ -163,6 +165,100 @@ class EventController extends Controller
         $em->flush();
 
         return new JsonResponse(['ok' => true]);
+    }
+
+    /**
+     * @param Request $request
+     * @param $idEvent
+     * @Route("/event/{idEvent}", requirements={"idEvent": "\d+"}, name="event")
+     */
+    public function  viewEventAction(Request $request, $idEvent)
+    {
+        $event = $this->getDoctrine()->getRepository('AppBundle:Event')->find($idEvent);
+
+        return $this->render('@App/default/event/view-event.html.twig',[
+            'event' => $event
+        ]);
+    }
+
+    /**
+     * @param Request $request
+     * @Route("/event/find", name="find-event")
+     */
+    public function findEventAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+
+        $options = [];
+        $options['tags'] = $em->getRepository('AppBundle:EventTag')
+            ->createQueryBuilder('et')
+            ->select()->getQuery()
+            ->getResult(Query::HYDRATE_ARRAY);
+
+        # hard code tag placeholder
+            array_unshift($options['tags'], ['id'=>0, 'name' => 'Выберите теги']);
+            $formatted = [];
+            foreach ($options['tags'] as $k => $tag) {
+                $formatted[$tag['name']] = $tag['id'];
+            }
+            $options['tags'] = $formatted;
+            unset($formatted);
+        # ------------------------
+
+        $options['countries'] = $em->getRepository('AppBundle:Location\Country')->findAll();
+        $options['membersRanges'] = ['< 3' => 1, '3 - 8' => 2, '> 8' => 3];
+        $options['startRanges'] = ['1-3 дня' => 1, 'месяц' => 2, 'более' => 3];
+
+        $defaultData = $options;
+        $form = $this->createFormBuilder([])
+            ->add('country', EntityType::class, [
+                'class' => 'AppBundle:Location\Country',
+                'label' => '#Страна',
+                'placeholder' => 'Выберите страну', 'required' => false
+            ])
+            ->add('tags', ChoiceType::class, [
+                'multiple' => true,
+                'required' => false,
+                'choice_attr' => function ($val, $key) {
+                    if ($val == 'Выберите теги') {
+                        return ['disabled selected' => 'disabled'];
+                    } else return [];
+                },
+                'choices' => $options['tags']
+            ])
+            ->add('membersRanges', ChoiceType::class, [
+                'placeholder' => 'Кол-во человек',
+                'required' => false,
+                'choices' => $options['membersRanges']
+            ])
+            ->add('startRanges', ChoiceType::class, [
+                'placeholder' => 'До начала',
+                'required' => false,
+                'choices' => $options['startRanges']
+            ])
+            ->add('textSearch', TextType::class, [
+                'required' => false,
+            ])
+            ->getForm();
+        $form->handleRequest($request);
+
+        if ($form->getData()) {
+            $filters = $form->getData();
+            $qb = $em->getRepository('AppBundle:Event')->createQueryBuilder('e');
+            $events = $qb->innerJoin('e.event_tags', 't')
+                ->add('where', $qb->expr()->orX($qb->expr()->in('t.id', $filters['tags'])))
+                ->innerJoin('e.country', 'c')
+                ->where('c.name =?1')
+                ->setParameters([1 => $filters['country']->getName()])
+                ->orderBy('e.id','desc')
+                ->getQuery()
+                ->getResult();
+        }
+        return $this->render('@App/default/event/find-event.html.twig', [
+            'events' => isset($events) ? $events : null,
+            'form' => $form->createView()
+        ]);
     }
 
 }

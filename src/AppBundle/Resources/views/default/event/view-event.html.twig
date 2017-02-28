@@ -1,0 +1,75 @@
+{% extends '@App/default/index.html.twig' %}
+
+{% block content %}
+    <div class="container">
+        <div class=" col m12 block">
+            <div class="event-view-wrap">
+                <h4>{{ event.title }}</h4>
+                <p class="event-info">
+                    {{ event.text }}
+                </p>
+                <div class="event-date">
+                    {% if date(event.eventDateTime) > date() %}
+                        {% set difference = date(event.eventDateTime).diff(date()) %}
+                        {% set leftDays = difference.days %}
+                        <span class="chip"> начало через:
+                            {{ difference.d }} дней {{ difference.h }} ч</span>
+                    {% else %}
+                        <span class="chip">завершено</span>
+                    {% endif %}
+                </div>
+                <div class="event-place">
+                    <span class="chip" >{{ event.city.name }}</span>
+                </div>
+
+                <div class="members-needed">
+                    <p>людей нужно</p>
+                    {{ event.peopleNeeded - event.getMembers()|length }}
+                </div>
+                <div class="event-author">
+                    <p>Организатор</p>
+                    <a href="{{ path('user_profile', {'id': event.author.id}) }}">
+                        <div class="user-icon" style="background-image:
+                                url({% if event.author.image|length %}
+                            {{ ('images/users/'~event.author.image)| imagine_filter('user_icon_thumb') }}
+                        {% else %}
+                            {{ asset('images/users/default-avatar.jpg') }}
+                        {% endif %}
+                                );">
+                        </div><div>{{ event.author.getUsername }}</div>
+                    </a>
+                </div>
+
+                <div class="members">
+                    <p>Участвуют</p>
+                    {% for member in event.members %}
+                        <div class="member">
+                            <a href="{{ path('user_profile', {'id': member.id}) }}">
+                                <div class="user-icon" style="background-image:
+                                        url({% if member.image|length %}
+                                    {{ ('images/users/'~member.image)| imagine_filter('user_icon_thumb') }}
+                                {% else %}
+                                    {{ asset('images/users/default-avatar.jpg') }}
+                                {% endif %}
+                                        );">
+                                </div><div>{{ member.getUsername }}</div>
+                            </a>
+                        </div>
+                    {% endfor %}
+                    {% if date(event.eventDateTime) > date()  and app.user%}
+                        {# join or leave event on click #}
+                        <a class="btn-floating  waves-effect waves-light join-event-button"
+                           onclick="Event.join('{{ path('join_event')}}', '{{ event.id }}', '{{ app.user.id }}')">
+                            <i class="material-icons">
+                                {% if event.isMember(app.user) %} remove
+                                {% else %} add
+                                {% endif %}
+                            </i>
+                        </a>
+                    {% endif %}
+                </div>
+
+            </div>
+        </div>
+    </div>
+{% endblock %}

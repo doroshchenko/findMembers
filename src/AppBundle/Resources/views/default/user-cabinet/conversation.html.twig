@@ -9,7 +9,15 @@
                 {% set author = message.author %}
                 <div class="message-box">
                 {% if author.userName != prevAuthor.userName or key == 0 %}
-                    <div class="btn-floating btn user-icon"></div>
+                    <a href="{{ path('user_profile', {'id': author.id}) }}">
+                        <div class="user-icon" style="background-image:url({% if author.image|length %}
+                            {{ ('images/users/'~author.image)| imagine_filter('user_icon_thumb') }}
+                        {% else %}
+                            {{ asset('images/users/default-avatar.jpg') }}
+                        {% endif %}
+                                );">
+                        </div>
+                    </a>
                     <div class="author">{{ message.author.userName }}</div>
                 {% endif %}
                     <div id="msg-{{ message.id }}" class="message {% if message.isRead == 0 and message.author != app.user %}unread{% endif %}">

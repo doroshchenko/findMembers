@@ -188,8 +188,6 @@ class EventController extends Controller
     public function findEventAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
-
-
         $options = [];
         $options['tags'] = $em->getRepository('AppBundle:EventTag')
             ->createQueryBuilder('et')
@@ -207,16 +205,14 @@ class EventController extends Controller
         # ------------------------
 
         $options['countries'] = $em->getRepository('AppBundle:Location\Country')->findAll();
-        $options['membersRanges'] = ['< 3' => 1, '3 - 8' => 2, '> 8' => 3];
-        $options['startRanges'] = ['1-3 дня' => 1, 'месяц' => 2, 'более' => 3];
+        $options['membersRanges'] = ['< 3' => '< 3', '3 - 8' => '3 - 8', '> 8' => '> 8'];
+        $options['startRanges'] = ['1-3 дня' => '< 3', 'месяц' => '3-30', 'более' => '>30'];
 
-        $defaultData = $options;
         $form = $this->createFormBuilder([])
             ->add('country', EntityType::class, [
                 'class' => 'AppBundle:Location\Country',
                 'label' => '#Страна',
-                'placeholder' => 'Выберите страну', 'required' => false
-            ])
+                'placeholder' => 'Выберите страну', 'required' => false])
             ->add('tags', ChoiceType::class, [
                 'multiple' => true,
                 'required' => false,
@@ -225,36 +221,25 @@ class EventController extends Controller
                         return ['disabled selected' => 'disabled'];
                     } else return [];
                 },
-                'choices' => $options['tags']
-            ])
+                'choices' => $options['tags']])
             ->add('membersRanges', ChoiceType::class, [
                 'placeholder' => 'Кол-во человек',
                 'required' => false,
-                'choices' => $options['membersRanges']
-            ])
+                'choices' => $options['membersRanges']])
             ->add('startRanges', ChoiceType::class, [
                 'placeholder' => 'До начала',
                 'required' => false,
-                'choices' => $options['startRanges']
-            ])
-            ->add('textSearch', TextType::class, [
-                'required' => false,
-            ])
+                'choices' => $options['startRanges']])
+            ->add('textSearch', TextType::class, ['required' => false])
             ->getForm();
+
         $form->handleRequest($request);
 
         if ($form->getData()) {
             $filters = $form->getData();
-            $qb = $em->getRepository('AppBundle:Event')->createQueryBuilder('e');
-            $events = $qb->innerJoin('e.event_tags', 't')
-                ->add('where', $qb->expr()->orX($qb->expr()->in('t.id', $filters['tags'])))
-                ->innerJoin('e.country', 'c')
-                ->where('c.name =?1')
-                ->setParameters([1 => $filters['country']->getName()])
-                ->orderBy('e.id','desc')
-                ->getQuery()
-                ->getResult();
+            $events = $em->getRepository('AppBundle:Event')->findByFilters($filters);
         }
+
         return $this->render('@App/default/event/find-event.html.twig', [
             'events' => isset($events) ? $events : null,
             'form' => $form->createView()

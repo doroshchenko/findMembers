@@ -118,6 +118,12 @@ nav {
         label[for="remember_me"] {
             display: none;
         }
+        .indicator {
+            background-color: #4caf50;
+        }
+        a {
+            color : #777 !important;
+        }
     }
 }
 
@@ -134,6 +140,15 @@ nav {
         margin: 5px;
         color: #4B8B20;
         font-size: 34px;
+
+        span {
+            position: relative;
+            top: -17px;
+            right: -11px;
+        }
+        a {
+            color: #26a69a;
+        }
     }
     .actions {
         margin: 15px;
@@ -294,5 +309,21 @@ nav {
 .event-filter-form {
     h4 {
         margin-bottom: 55px;
+    }
+}
+
+.users-wrap {
+    padding: 9px;
+    .user {
+        margin: 10px 0 0 5px;
+
+        span {
+            position: relative;
+            top: -17px;
+            right: -11px;
+        }
+        a {
+            color: #26a69a;
+        }
     }
 }

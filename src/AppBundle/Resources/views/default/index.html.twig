@@ -104,8 +104,8 @@
                             {% endif %}
                                     );">
                             </div>
+                            <span>{{ app.user }}</span>
                             </a>
-                            {{ app.user }}
                         </div>
                         <div class="actions">
                             <div>
@@ -126,6 +126,26 @@
                         {% for tag in app.request.query|keys %}
                             <div class="active-filter"><span>{{ tag }}</span><i class="active-filter-remove material-icons" onclick="removeFilters(this)">clear</i></div>
                         {% endfor %}
+                    </div>
+                    <div class="block">
+                        <div class="users-wrap">
+                        <b>Пользователи</b>
+                        {% for user in users %}
+                            <div class="user">
+                                <a href="{{ path('user_profile', {'id': user.id}) }}">
+                                    <div class="user-icon" style="background-image:
+                                            url({% if user.image|length %}
+                                        {{ ('images/users/'~user.image)| imagine_filter('user_icon_thumb') }}
+                                    {% else %}
+                                        {{ asset('images/users/default-avatar.jpg') }}
+                                    {% endif %}
+                                            );">
+                                    </div>
+                                <span>{{ user }}</span>
+                                </a>
+                            </div>
+                        {% endfor %}
+                        </div>
                     </div>
                 </div>
 

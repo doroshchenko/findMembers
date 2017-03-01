@@ -42,11 +42,14 @@ class HomeController extends Controller
                 ->getRepository('AppBundle:User')
                 ->countUnreadMessages($this->getUser())
             : 0;
+        $users = $this->getDoctrine()
+            ->getRepository('AppBundle:User')->findAll();
 
         return $this->render('@App/default/index.html.twig', [
             'events' => $allEvents,
             'tags' => $allTags,
-            'unreadMsg' => $unreadMsg
+            'unreadMsg' => $unreadMsg,
+            'users' => $users
         ]);
     }
 }

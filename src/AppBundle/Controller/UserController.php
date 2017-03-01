@@ -90,6 +90,12 @@ class UserController extends Controller
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($user);
                 $em->flush();
+
+                $cacheManager = $this->get('liip_imagine.cache.manager');
+                $cacheManager->remove('images/users/'.$user->getImage(), 'my_thumb');
+               // $cacheManager->getBrowserPath('/images/users/'.$user->getImage(), 'my_thumb');
+                $cacheManager->remove('images/users/'.$user->getImage(), 'user_icon_thumb');
+                //$cacheManager->resolve('images/users/'.$user->getImage(), 'user_icon_thumb');*/
             }
         }
         $user = $this->getDoctrine()->getRepository("AppBundle:User")->find($id);

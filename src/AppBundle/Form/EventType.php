@@ -42,7 +42,7 @@ class EventType extends AbstractType
             ->add('text', TextAreaType::class)
             ->add('event_date_time', DateTimeType::class, ['date_widget' => 'single_text', 'time_widget' => 'single_text'])
             ->add('event_tags', null,
-                ['expanded' => 'true', 'multiple' => 'true', 'choice_label' => 'name'])
+                ['multiple' => 'true', 'choice_label' => 'name'])
             ->add('save', SubmitType::class, array('label' => 'create event'));
     }
 

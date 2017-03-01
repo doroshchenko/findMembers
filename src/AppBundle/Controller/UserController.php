@@ -96,7 +96,7 @@ class UserController extends Controller
         return $this->render('@App/default/user-profile.html.twig', [
             'user' => $user,
             'form' => $form->createView(),
-            'avatarForm' => ($avatarForm) ? $avatarForm->createView() : null
+            'avatarForm' => isset($avatarForm) ? $avatarForm->createView() : null
         ]);
     }
 

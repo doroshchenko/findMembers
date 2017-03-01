@@ -2,7 +2,9 @@
 
 {% block content %}
     <div class="container">
-       <h2>Создайте свое мероприятие</h2>
+    <div class=" col m12 block">
+    <div class="event-view-wrap">
+       <h4>Создайте свое событие</h4>
         <div class="row">
                 {{ form_start(form, {'attr': {'class': 'col s12'}}) }}
             {{ form_errors(form) }}
@@ -14,9 +16,9 @@
                         }}
                     </div>
                     <div>
-                        {{ form_label(form.people_needed) }}
+                        <label style="position:relative; left: 11px; top: 18px; font-size: 14px;">Нужно человек</label>
                     </div>
-                    <div class="input-field col s6">
+                    <div class="input-field col s12">
                         <p class="range-field">
                         {{ form_widget(form.people_needed, {
                             'attr': { 'class': 'validate', 'min': '3', 'max': '20' }})
@@ -24,21 +26,21 @@
                         </p>
                     </div>
                 </div>
-                <div class="row">
-                    <div>{{ form_label(form.country, 'Место проведения') }}</div>
+            <label style="font-size: 14px;">Место проведения</label>
+            <div class="row">
                     <div class="col s4">
                         {{  form_errors(form.country) }}
-                        {{ form_widget(form.country, {'attr': {'class': 'browser-default',
+                        {{ form_widget(form.country, {'attr': {
                             'onchange':'EventForm.getRegionList(this.value,"'~path("ajax_regions")~'")'}}) }}
                     </div>
                     <div class="col s4">
                         {{  form_errors(form.region) }}
-                        {{ form_widget(form.region, {'attr': {'class': 'browser-default',
+                        {{ form_widget(form.region, {'attr': {
                             'onchange':'EventForm.getCityList(this.value,"'~path("ajax_cities")~'")'}}) }}
                     </div>
                     <div class="col s4">
                         {{  form_errors(form.city) }}
-                        {{ form_widget(form.city, {'attr': {'class': 'browser-default'}}) }}
+                        {{ form_widget(form.city) }}
                     </div>
                 </div>
                 <div class="row">
@@ -50,7 +52,7 @@
                 </div>
                 <div class="row">
                     <div class="input-field col s12">
-                        {{ form_label(form.event_date_time, 'Дата проведения') }}
+                       {# {{ form_label(form.event_date_time, 'Дата проведения') }}#}
                         {{ form_errors(form.event_date_time) }}
                         {{ form_widget(form.event_date_time)
                         }}
@@ -60,18 +62,16 @@
                     <div class="col s12">
                        {{ form_label(form.event_tags, 'Добавте теги') }}
                         {{ form_errors(form.event_tags) }}
-                        {{ form_widget(form.event_tags, {'attr': {'multiple': 'multiple', 'class': 'browser-default'}}) }}
+                        {{ form_widget(form.event_tags, {'attr': {'multiple': 'multiple'}}) }}
                         {# <input type="hidden" id="form_event_tags" name="form[event_tags][0][6]" value="tag1" required="required">
-                        <input type="hidden" id="form_event_tags" name="form[event_tags][1][5]" value="tag2" required="required">
- #}
-                        <div class="chips chips-placeholder" onclick="$('.chips-placeholder').material_chip({
-                            placeholder: 'Enter a tag',
-                            secondaryPlaceholder: '+Tag'});">
-                        </div>
+                        <input type="hidden" id="form_event_tags" name="form[event_tags][1][5]" value="tag2" required="required"> #}
+
                     </div>
                 </div>
             {{ form_widget(form.save) }}
             {{ form_end(form) }}
         </div>
+    </div>
+    </div>
     </div>
 {% endblock %}

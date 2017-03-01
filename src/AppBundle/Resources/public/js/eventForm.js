@@ -56,7 +56,7 @@ var EventForm = {
                 }
                 $(that.config.selectors.region).html(options);
                 $(that.config.selectors.city).html('<option>Город</option>');
-
+                $('select').material_select();
                 if (resolve) { // used in promise call
                     resolve('success');
                 }
@@ -78,6 +78,7 @@ var EventForm = {
                     options += '<option value ="' + res.cities[i].id +'">'+ res.cities[i].name +'</option>';
                 }
                 $(that.config.selectors.city).html(options);
+                $('select').material_select();
             },
             error: function(res) {
 

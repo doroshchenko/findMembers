@@ -104,6 +104,20 @@ nav {
         background-color: #fefefe;
         margin: 15% auto; /* 15% from the top and centered */
         padding: 20px;
+        text-align: center;
+        .row {
+            text-align: center;
+        }
+        h4 {
+            color: #666;
+        }
+        .tabs {
+            width: 66%;
+            margin: 12px auto;
+        }
+        label[for="remember_me"] {
+            display: none;
+        }
     }
 }
 
@@ -274,5 +288,11 @@ nav {
             margin: 0 7px;
             text-align: center;
         }
+    }
+}
+
+.event-filter-form {
+    h4 {
+        margin-bottom: 55px;
     }
 }

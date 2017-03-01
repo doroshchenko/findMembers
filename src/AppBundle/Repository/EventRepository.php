@@ -12,6 +12,7 @@ use Doctrine\ORM\EntityRepository;
 
 class EventRepository extends  EntityRepository
 {
+
     public function findByFilters($filters)
     {
         $params = [];
@@ -44,18 +45,31 @@ class EventRepository extends  EntityRepository
             $options['startRanges'] = ['1-3 дня' => '< 3', 'месяц' => '3-30', 'более' => '>30'];
             if (preg_match('/-/', $filters['startRanges'])) {
                 $ranges = explode('-',$filters['startRanges']);
-                $qb->andWhere($qb->expr()->between('e.event_date_time', ':member1', ':member2'));
-                $params['date1'] = trim(array_shift($ranges));
-                $params['date2'] = trim(array_shift($ranges));
+                $qb->andWhere($qb->expr()->between('e.event_date_time', ':date1', ':date2'));
+                $now = new \DateTime();
+                $params['date1'] = new \DateTime();
+                $params['date2'] = $now->add(new \DateInterval("P30D"));//trim(array_shift($ranges));
             } elseif (preg_match('/>/', $filters['startRanges'])) {
-                $members = (int)substr($filters['startRanges'], strpos($filters['startRanges'], ">") + 1);
-                $qb->andWhere('e.event_date_time > :members');
-                $params['members'] = $members;
+                $days = (int)substr($filters['startRanges'], strpos($filters['startRanges'], ">") + 1);
+                $qb->andWhere('e.event_date_time > :date');
+                $interval = "P".$days."D";
+                $now = new \DateTime();
+                $params['date'] = $now->add(new \DateInterval($interval));
             } elseif (preg_match('/</', $filters['startRanges'])) {
-                $members = (int)substr($filters['startRanges'], strpos($filters['startRanges'], ">") + 1);
-                $qb->andWhere('e.people_needed < :members');
-                $params['members'] = $members;
+                $days = (int)substr($filters['startRanges'], strpos($filters['startRanges'], ">") + 1);
+                $qb->andWhere($qb->expr()->between('e.event_date_time', ':date1', ':date2'));
+                $interval = "P".$days."D";
+                $now = new \DateTime();
+                $params['date1'] = new \DateTime();
+                $params['date2'] = $now->add(new \DateInterval($interval));
             }
+        }
+        if (count($filters['textSearch'])) {
+            $qb->andWhere('e.title like :text');
+            $qb->orWhere('e.text like :text2');
+
+            $params['text'] = '%'.$filters['textSearch'].'%';
+            $params['text2'] = '%'.$filters['textSearch'].'%';
         }
 
         return $qb->setParameters($params)

@@ -55,8 +55,8 @@ class EventController extends Controller
             $em->persist($event);
             $em->flush();
 
-            return $this->redirectToRoute('user_events',[
-                'id' => $event->getAuthor()->getId()
+            return $this->redirectToRoute('event',[
+                'idEvent' => $event->getId()
             ]);
         }
 

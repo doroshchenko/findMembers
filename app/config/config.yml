@@ -45,7 +45,7 @@ twig:
 # Doctrine Configuration
 doctrine:
     dbal:
-        url: "%env(CLEARDB_DATABASE_URL:)%"
+        url: 'mysql://b9f72ea1dacff6:6f7865db@us-cdbr-iron-east-04.cleardb.net/heroku_cc26dbe2517d33e'
         charset:  UTF8
         # if using pdo_sqlite as your database driver:
         #   1. add the path in parameters.yml

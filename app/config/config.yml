@@ -45,7 +45,7 @@ twig:
 # Doctrine Configuration
 doctrine:
     dbal:
-        url: "%env(CLEARDB_DATABASE_URL:)%"
+        url: "%env(DATABASE_URL:)%"
         driver:   pdo_mysql
         host:     "%database_host%"
         port:     "%database_port%"

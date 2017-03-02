@@ -41,7 +41,7 @@ class User extends BaseUser
     private $conversations = null;
 
     /**
-     * @ORM\Column(type="string", options={"default":null})
+     * @ORM\Column(type="string", nullable=true)
      * @Assert\File(
      *     maxSize = "5M",
      *     mimeTypes = {"image/jpeg", "image/gif", "image/png", "image/tiff"},

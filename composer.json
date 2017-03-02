@@ -53,6 +53,9 @@
         "warmup": [
             "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters",
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::clearCache"
+        ],
+        "compile": [
+            "bin/console assetic:dump"
         ]
     },
     "config": {

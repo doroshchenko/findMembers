@@ -29,7 +29,8 @@
         "friendsofsymfony/jsrouting-bundle": "^1.6",
         "vich/uploader-bundle": "^1.4",
         "liip/imagine-bundle": "^1.7",
-        "doctrine/doctrine-migrations-bundle": "dev-master"
+        "doctrine/doctrine-migrations-bundle": "dev-master",
+        "ext-gd": "*"
     },
     "require-dev": {
         "sensio/generator-bundle": "^3.0",

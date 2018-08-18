@@ -1,3 +1,5 @@
+Test project.
+http://blooming-mesa-56381.herokuapp.com/  (If you see 500 error just refresh the page)
 
 Create your own event or join existing.
 
